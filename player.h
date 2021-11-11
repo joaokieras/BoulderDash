@@ -1,0 +1,29 @@
+#ifndef __PLAYER__
+#define __PLAYER__
+
+#include <allegro5/allegro5.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_image.h>
+#include "game.h"
+
+struct player{
+  // Sprites
+  ALLEGRO_BITMAP* player_parado[7];
+  ALLEGRO_BITMAP* player_esquerda[7];
+  ALLEGRO_BITMAP* player_direita[7];
+  // Flags de movimento
+  int flag_up, flag_down, flag_right, flag_left;
+  // Ciclos de animação (percorre vetor de sprites)
+  int ciclos_parado, ciclos_esq, ciclos_dir;
+  int pos_x, pos_y;
+  int vel_x, vel_y;
+};
+typedef struct player player;
+
+player* inicia_jogador(ALLEGRO_BITMAP* sheet);
+void draw_player(player *jogador, long frames);
+
+#endif
