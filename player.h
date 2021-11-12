@@ -18,12 +18,12 @@ struct player{
   int flag_up, flag_down, flag_right, flag_left;
   // Ciclos de animação (percorre vetor de sprites)
   int ciclos_parado, ciclos_esq, ciclos_dir;
+  int tired;
   int pos_x, pos_y;
   int vel_x, vel_y;
 };
 typedef struct player player;
 
 player* inicia_jogador(ALLEGRO_BITMAP* sheet);
-void draw_player(player *jogador, long frames);
-
+void draw_player(player *jogador, int** mapa, long frames);
 #endif

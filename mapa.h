@@ -14,12 +14,14 @@
 #define MURO     2
 #define PEDRA    3
 #define DIAMANTE 4
+#define VAZIO    5
 
 struct objetos{
   ALLEGRO_BITMAP* terra;
   ALLEGRO_BITMAP* muro;
   ALLEGRO_BITMAP* metal;
   ALLEGRO_BITMAP* pedra;
+  ALLEGRO_BITMAP* vazio;
   ALLEGRO_BITMAP* diamante[8];
   int ciclos_diamante;
 };

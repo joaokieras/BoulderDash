@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
+#include "mapa.h"
 #include "player.h"
 
 player* inicia_jogador(ALLEGRO_BITMAP* sheet){
@@ -17,6 +18,7 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->ciclos_parado = 0;
   jogador->ciclos_esq = 0;
   jogador->ciclos_dir = 0;
+  jogador->tired = 0;
   jogador->flag_up = 0;
   jogador->flag_down = 0;
   jogador->flag_left = 0;
@@ -37,11 +39,18 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   return jogador;
 }
 
-void draw_player(player *jogador, long frames){
+void draw_player(player *jogador, int** mapa, long frames){
+  int x, y;
+  x = jogador->pos_x / SIZE_OBJS;
+  y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
   if(jogador->flag_left){
     al_draw_scaled_bitmap(jogador->player_esquerda[jogador->ciclos_esq], 0, 0, 15, 17, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
     jogador->flag_left = 0;
     jogador->ciclos_esq++;
+    if(jogador->tired % 5 == 0){
+      jogador->pos_x -= jogador->vel_x;
+      jogador->tired = 0;
+    }
     if(jogador->ciclos_esq == 7)
       jogador->ciclos_esq = 0;
   }
@@ -49,6 +58,10 @@ void draw_player(player *jogador, long frames){
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
     jogador->flag_right = 0;
     jogador->ciclos_dir++;
+    if(jogador->tired % 5 == 0){
+      jogador->pos_x += jogador->vel_x;
+      jogador->tired = 0;
+    }
     if(jogador->ciclos_dir == 7)
       jogador->ciclos_dir = 0;
     }
@@ -56,6 +69,10 @@ void draw_player(player *jogador, long frames){
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
     jogador->flag_up = 0;
     jogador->ciclos_dir++;
+    if(jogador->tired % 5 == 0){
+      jogador->pos_y -= jogador->vel_y;
+      jogador->tired = 0;
+    }
     if(jogador->ciclos_dir == 7)
       jogador->ciclos_dir = 0;
   }
@@ -63,6 +80,10 @@ void draw_player(player *jogador, long frames){
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
     jogador->flag_down = 0;
     jogador->ciclos_dir++;
+    if(jogador->tired % 5 == 0){
+      jogador->pos_y += jogador->vel_y;
+      jogador->tired = 0;
+    }
     if(jogador->ciclos_dir == 7)
       jogador->ciclos_dir = 0;
   } 

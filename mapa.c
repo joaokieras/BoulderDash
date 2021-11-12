@@ -38,6 +38,7 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   obj->terra = al_create_sub_bitmap(sheet, 48, 48, 15, 16);
   obj->muro  = al_create_sub_bitmap(sheet, 32, 48, 15, 16);
   obj->pedra = al_create_sub_bitmap(sheet, 80, 48, 15, 16);
+  obj->vazio = al_create_sub_bitmap(sheet, 96, 48, 15, 16);
   obj->diamante[0] = al_create_sub_bitmap(sheet, 0, 64, 15, 16);
   obj->diamante[1] = al_create_sub_bitmap(sheet, 16, 64, 15, 16);
   obj->diamante[2] = al_create_sub_bitmap(sheet, 0, 80, 15, 16);
@@ -66,6 +67,9 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
   	  	  break;
         case PEDRA:
           al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          break;
+        case VAZIO:
+          al_draw_scaled_bitmap(objetos_mapa->vazio, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case DIAMANTE:
           if(objetos_mapa->ciclos_diamante == 7)

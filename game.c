@@ -128,10 +128,11 @@ void state_close(){
 
 void draw(player *jogador, bool redraw, long frames){
   al_clear_to_color(al_map_rgb(0, 0, 0));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x, jogador->pos_y);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x/SIZE_OBJS, (jogador->pos_y - MARGIN_TOP)/SIZE_OBJS);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "tired: %d", jogador->tired);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
   draw_map(mapa, objetos_mapa, frames);
-  draw_player(jogador, frames);
+  draw_player(jogador, mapa, frames);
   al_flip_display();
   redraw = false;
 }
@@ -140,25 +141,25 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
   if(key[ALLEGRO_KEY_UP]){
   	if((jogador->pos_y - SIZE_OBJS - MARGIN_TOP) > 0){
       jogador->flag_up = 1;
-      jogador->pos_y -= jogador->vel_y;
+      jogador->tired++;
     }
   }
   else if(key[ALLEGRO_KEY_DOWN]){
   	if(jogador->pos_y < HEIGHT - SIZE_OBJS - MARGIN_TOP){
       jogador->flag_down = 1;
-      jogador->pos_y += jogador->vel_y;
+      jogador->tired++;
     }
   }
   else if(key[ALLEGRO_KEY_LEFT]){
   	if(jogador->pos_x > SIZE_OBJS){
       jogador->flag_left = 1;
-      jogador->pos_x -= jogador->vel_x;
+      jogador->tired++;
     }
   }
   else if(key[ALLEGRO_KEY_RIGHT]){
   	if(jogador->pos_x < WIDTH - 2 * SIZE_OBJS){
       jogador->flag_right = 1;
-      jogador->pos_x += jogador->vel_x;
+      jogador->tired++;
     }
   }
   
