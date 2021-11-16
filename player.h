@@ -1,3 +1,5 @@
+// Projeto desenvolvido por João Pedro Kieras Oliveira
+// GRR 20190379 Dinf - UFPR
 #ifndef __PLAYER__
 #define __PLAYER__
 
@@ -25,7 +27,7 @@ struct player{
 typedef struct player player;
 
 player* inicia_jogador(ALLEGRO_BITMAP* sheet);
-int testa_terreno(player *jogador, int** mapa, int direcao);
+int testa_terreno(player *jogador, int** mapa, int direcao, long frames);
 void atualiza_player(player *jogador, int direcao, int andou);
 void draw_player(player *jogador, int** mapa, long frames);
 #endif

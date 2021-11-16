@@ -1,3 +1,5 @@
+// Projeto desenvolvido por João Pedro Kieras Oliveira
+// GRR 20190379 Dinf - UFPR
 #ifndef __SPRITES__
 #define __SPRITES__
 

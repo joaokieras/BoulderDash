@@ -1,3 +1,5 @@
+// Projeto desenvolvido por João Pedro Kieras Oliveira
+// GRR 20190379 Dinf - UFPR
 #ifndef __MAPA__
 #define __MAPA__
 

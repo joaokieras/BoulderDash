@@ -1,3 +1,5 @@
+# Projeto desenvolvido por João Pedro Kieras Oliveira
+# GRR 20190379 Dinf - UFPR
 CC = gcc
 EXEC = Boulder_Dash
 MAIN = main.c 
