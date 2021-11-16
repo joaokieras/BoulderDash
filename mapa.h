@@ -15,6 +15,7 @@
 #define PEDRA    3
 #define DIAMANTE 4
 #define VAZIO    5
+#define PLAYER   6
 
 struct objetos{
   ALLEGRO_BITMAP* terra;

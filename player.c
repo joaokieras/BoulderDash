@@ -40,52 +40,28 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
 }
 
 void draw_player(player *jogador, int** mapa, long frames){
-  int x, y;
+  int x, y, andou = 1;
   x = jogador->pos_x / SIZE_OBJS;
   y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
   if(jogador->flag_left){
+  	andou = testa_terreno(x, y, mapa, 0);
+  	atualiza_player(jogador, 0, andou);
     al_draw_scaled_bitmap(jogador->player_esquerda[jogador->ciclos_esq], 0, 0, 15, 17, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
-    jogador->flag_left = 0;
-    jogador->ciclos_esq++;
-    if(jogador->tired % 5 == 0){
-      jogador->pos_x -= jogador->vel_x;
-      jogador->tired = 0;
-    }
-    if(jogador->ciclos_esq == 7)
-      jogador->ciclos_esq = 0;
   }
   else if(jogador->flag_right){
+  	andou = testa_terreno(x, y, mapa, 1);
+  	atualiza_player(jogador, 1, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
-    jogador->flag_right = 0;
-    jogador->ciclos_dir++;
-    if(jogador->tired % 5 == 0){
-      jogador->pos_x += jogador->vel_x;
-      jogador->tired = 0;
-    }
-    if(jogador->ciclos_dir == 7)
-      jogador->ciclos_dir = 0;
-    }
+  }
   else if(jogador->flag_up){
+  	andou = testa_terreno(x, y, mapa, 2);
+  	atualiza_player(jogador, 2, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
-    jogador->flag_up = 0;
-    jogador->ciclos_dir++;
-    if(jogador->tired % 5 == 0){
-      jogador->pos_y -= jogador->vel_y;
-      jogador->tired = 0;
-    }
-    if(jogador->ciclos_dir == 7)
-      jogador->ciclos_dir = 0;
   }
   else if(jogador->flag_down){
+  	andou = testa_terreno(x, y, mapa, 3);
+  	atualiza_player(jogador, 3, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
-    jogador->flag_down = 0;
-    jogador->ciclos_dir++;
-    if(jogador->tired % 5 == 0){
-      jogador->pos_y += jogador->vel_y;
-      jogador->tired = 0;
-    }
-    if(jogador->ciclos_dir == 7)
-      jogador->ciclos_dir = 0;
   } 
   else
     al_draw_scaled_bitmap(jogador->player_parado[jogador->ciclos_parado], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
@@ -94,4 +70,75 @@ void draw_player(player *jogador, int** mapa, long frames){
     jogador->ciclos_parado++;
   if(jogador->ciclos_parado == 7)
     jogador->ciclos_parado = 0;
+}
+
+int testa_terreno(int x, int y, int** mapa, int direcao){
+  switch(direcao){
+  	case 0:
+  	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
+  	  	mapa[y][x - 1] = VAZIO;
+  	  	return 1;
+  	  }
+  	  break;
+  	case 1:
+  	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
+  	  	mapa[y][x + 1] = VAZIO;
+  	  	return 1;
+  	  }
+  	  break;
+  	case 2:
+  	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
+  	  	mapa[y - 1][x] = VAZIO;
+  	  	return 1;
+  	  }
+  	  break;
+  	case 3:
+  	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
+  	  	mapa[y + 1][x] = VAZIO;
+  	  	return 1;
+  	  }
+  	  break;
+  }
+  return 0;
+}
+
+void atualiza_player(player *jogador, int direcao, int andou){
+  switch(direcao){
+  	case 0:
+  	  jogador->flag_left = 0;
+      jogador->ciclos_esq++;
+      if(jogador->tired % 5 == 0 && andou){
+    	jogador->pos_x -= jogador->vel_x;
+    	jogador->tired = 0;
+      }
+      break;
+    case 1:
+  	  jogador->flag_right = 0;
+      jogador->ciclos_dir++;
+      if(jogador->tired % 5 == 0 && andou){
+    	jogador->pos_x += jogador->vel_x;
+    	jogador->tired = 0;
+  	  }
+      break;
+    case 2:
+      jogador->flag_up = 0;
+      jogador->ciclos_dir++;
+      if(jogador->tired % 5 == 0 && andou){
+        jogador->pos_y -= jogador->vel_y;
+        jogador->tired = 0;
+      }
+      break;
+    case 3:
+      jogador->flag_down = 0;
+      jogador->ciclos_dir++;
+      if(jogador->tired % 5 == 0 && andou){
+        jogador->pos_y += jogador->vel_y;
+        jogador->tired = 0;
+      }
+      break;	  
+  }
+  if(jogador->ciclos_esq == 7)
+    jogador->ciclos_esq = 0;
+  if(jogador->ciclos_dir == 7)
+    jogador->ciclos_dir = 0;
 }
