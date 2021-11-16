@@ -135,6 +135,16 @@ void draw(player *jogador, bool redraw, long frames){
   draw_map(mapa, objetos_mapa, frames);
   draw_player(jogador, mapa, frames);
   al_flip_display();
+  if(frames % 300 == 0){
+  	int i, j;
+  	printf("---------------------------------MAPA NUMERICO-------------------------\n");
+  	for(i = 0;i < 22;i++){
+  		for(j = 0;j < 40;j++)
+  			printf("%d ", mapa[i][j]);
+  		printf("\n");
+  	}
+  	printf("\n");
+  }
   redraw = false;
 }
 

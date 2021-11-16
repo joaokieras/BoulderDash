@@ -25,7 +25,7 @@ struct player{
 typedef struct player player;
 
 player* inicia_jogador(ALLEGRO_BITMAP* sheet);
-int testa_terreno(int x, int y, int** mapa, int direcao);
+int testa_terreno(player *jogador, int** mapa, int direcao);
 void atualiza_player(player *jogador, int direcao, int andou);
 void draw_player(player *jogador, int** mapa, long frames);
 #endif

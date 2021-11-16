@@ -40,26 +40,24 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
 }
 
 void draw_player(player *jogador, int** mapa, long frames){
-  int x, y, andou = 1;
-  x = jogador->pos_x / SIZE_OBJS;
-  y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
+  int andou = 1;
   if(jogador->flag_left){
-  	andou = testa_terreno(x, y, mapa, 0);
+  	andou = testa_terreno(jogador, mapa, 0);
   	atualiza_player(jogador, 0, andou);
     al_draw_scaled_bitmap(jogador->player_esquerda[jogador->ciclos_esq], 0, 0, 15, 17, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_right){
-  	andou = testa_terreno(x, y, mapa, 1);
+  	andou = testa_terreno(jogador, mapa, 1);
   	atualiza_player(jogador, 1, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_up){
-  	andou = testa_terreno(x, y, mapa, 2);
+  	andou = testa_terreno(jogador, mapa, 2);
   	atualiza_player(jogador, 2, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_down){
-  	andou = testa_terreno(x, y, mapa, 3);
+  	andou = testa_terreno(jogador, mapa, 3);
   	atualiza_player(jogador, 3, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   } 
@@ -72,29 +70,44 @@ void draw_player(player *jogador, int** mapa, long frames){
     jogador->ciclos_parado = 0;
 }
 
-int testa_terreno(int x, int y, int** mapa, int direcao){
+int testa_terreno(player* jogador, int** mapa, int direcao){
+  int x, y;
+  x = jogador->pos_x / SIZE_OBJS;
+  y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;	
   switch(direcao){
   	case 0:
-  	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
-  	  	mapa[y][x - 1] = VAZIO;
+  	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO || mapa[y][x - 1] == PLAYER){
+  	  	if(jogador->tired % 5 == 0){
+  	  	  mapa[y][x - 1] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	    }
   	  	return 1;
   	  }
   	  break;
   	case 1:
-  	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
-  	  	mapa[y][x + 1] = VAZIO;
+  	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO || mapa[y][x + 1] == PLAYER){
+  	  	if(jogador->tired % 5 == 0){
+  	  	  mapa[y][x + 1] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	    }
   	  	return 1;
   	  }
   	  break;
   	case 2:
-  	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
-  	  	mapa[y - 1][x] = VAZIO;
+  	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO || mapa[y - 1][x] == PLAYER){
+  	  	if(jogador->tired % 5 == 0){
+  	  	  mapa[y - 1][x] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	    }
   	  	return 1;
   	  }
   	  break;
   	case 3:
-  	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
-  	  	mapa[y + 1][x] = VAZIO;
+  	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO || mapa[y + 1][x] == PLAYER){
+  	  	if(jogador->tired % 5 == 0){
+  	  	  mapa[y + 1][x] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	    }
   	  	return 1;
   	  }
   	  break;
