@@ -129,22 +129,10 @@ void draw(player *jogador, bool redraw, long frames){
   al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x/SIZE_OBJS, (jogador->pos_y - MARGIN_TOP)/SIZE_OBJS);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "mapa[i][j]: %d", mapa[(jogador->pos_y - MARGIN_TOP)/SIZE_OBJS][jogador->pos_x/SIZE_OBJS]);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 650, 0, 0, "mapa[i][j] esq: %d", mapa[(jogador->pos_y - MARGIN_TOP)/SIZE_OBJS][jogador->pos_x/SIZE_OBJS - 1]);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "tired: %d", jogador->tired);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
   draw_map(mapa, objetos_mapa, frames);
   draw_player(jogador, mapa, frames);
   al_flip_display();
-  if(frames % 300 == 0){
-  	int i, j;
-  	printf("---------------------------------MAPA NUMERICO-------------------------\n");
-  	for(i = 0;i < 22;i++){
-  		for(j = 0;j < 40;j++)
-  			printf("%d ", mapa[i][j]);
-  		printf("\n");
-  	}
-  	printf("\n");
-  }
   redraw = false;
 }
 
