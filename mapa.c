@@ -25,7 +25,6 @@ int** inicia_mapa(char* nome_mapa){
   	  fscanf(arq, "%d", &mapa[i][j]);
   	  
   fclose(arq);
-  fprintf(stderr, "Mapa lido com sucesso!\n");
   return mapa;
 }
 

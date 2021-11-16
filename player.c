@@ -26,6 +26,8 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->flag_down = 0;
   jogador->flag_left = 0;
   jogador->flag_right = 0;	
+  jogador->diamantes = 0;
+  jogador->pontuacao = 0;
   inicia_sprites_jogador(sheet, jogador);
   return jogador;
 }
@@ -70,63 +72,84 @@ int testa_terreno(player* jogador, int** mapa, int direcao, long frames){
   //1 - Direita
   //2 - Cima
   //3 - Baixo
-  switch(direcao){
+  //Personagem só pode se mover a cada 5 frames
+  if(jogador->tired % 5 == 0){
+    switch(direcao){
   	case 0:
+  	  //Verifica se há diamante
+  	  if(mapa[y][x - 1] == DIAMANTE){
+  	  	  mapa[y][x - 1] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	  	  jogador->pontuacao += 40;
+  	  	  jogador->diamantes++;
+  	  	  return 1;
+  	  }
   	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x - 1] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	    }
   	  }
   	  //Empurra pedra à esquerda a cada 10 frames para ser mais demorado e "difícil"
   	  //Se [vazio][pedra][player], então -> [pedra][player][vazio]
   	  if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x - 1] = PLAYER;
   	  	  mapa[y][x - 2] = PEDRA;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	  	}
   	  }
   	  break;
   	case 1:
+  	  if(mapa[y][x + 1] == DIAMANTE){
+  	  	  mapa[y][x + 1] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	  	  jogador->pontuacao += 40;
+  	  	  jogador->diamantes++;
+  	  	  return 1;
+  	  }
   	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x + 1] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	    }
   	  }
   	  //Empurra pedra à direita
   	  if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x + 1] = PLAYER;
   	  	  mapa[y][x + 2] = PEDRA;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	  	}
   	  }
   	  break;
   	case 2:
+  	  if(mapa[y - 1][x] == DIAMANTE){
+  	  	  mapa[y - 1][x] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	  	  jogador->pontuacao += 40;
+  	  	  jogador->diamantes++;
+  	  	  return 1;
+  	  }
   	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y - 1][x] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	    }
   	  }
   	  break;
   	case 3:
+  	  if(mapa[y + 1][x] == DIAMANTE){
+  	  	  mapa[y + 1][x] = PLAYER;
+  	  	  mapa[y][x] = VAZIO;
+  	  	  jogador->pontuacao += 40;
+  	  	  jogador->diamantes++;
+  	  	  return 1;
+  	  }
   	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
-  	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y + 1][x] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	    }
   	  }
   	  break;
   }
+  
+}
   return 0;
 }
 

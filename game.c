@@ -28,7 +28,6 @@ void inicia_allegro(bool teste, char *descricao){
 }
 
 void state_init(){
-  fprintf(stderr, "Inicializando allegro...\n");
   inicia_allegro(al_init(), "allegro");
   inicia_allegro(al_install_keyboard(), "keyboard");
 
@@ -62,20 +61,14 @@ void state_init(){
   al_register_event_source(queue, al_get_display_event_source(disp));
   al_register_event_source(queue, al_get_timer_event_source(timer));
 
-
-
-  fprintf(stderr, "Inicializações ok\n");
-
   state = SERVINDO;
 }
 
 void state_serve(){
-  fprintf(stderr, "Servindo...\n");
   state = JOGANDO;
 }
 
 void state_play(){
-  fprintf(stderr, "Jogando...\n");
   bool done = false;
   bool redraw = true;
   long frames = 0;
@@ -110,7 +103,6 @@ void state_play(){
 }
 
 void state_end(){
-  fprintf(stderr, "End game...\n");
   al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
   al_flip_display();
   usleep(1000000);
@@ -118,20 +110,19 @@ void state_end(){
 }
 
 void state_close(){
-  fprintf(stderr, "Closing...\n");
   al_destroy_bitmap(sheet);
   al_destroy_font(font);
   al_destroy_display(disp);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
-  printf("Destruições ok\n");
   exit(1);
 }
 
 void draw(player *jogador, bool redraw, long frames){
   al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x/SIZE_OBJS, (jogador->pos_y - MARGIN_TOP)/SIZE_OBJS);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "mapa[i][j]: %d", mapa[(jogador->pos_y - MARGIN_TOP)/SIZE_OBJS][jogador->pos_x/SIZE_OBJS]);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
   draw_map(mapa, objetos_mapa, frames);
   draw_player(jogador, mapa, frames);

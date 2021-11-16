@@ -23,6 +23,8 @@ struct player{
   int tired;
   int pos_x, pos_y;
   int vel_x, vel_y;
+  int diamantes;
+  int pontuacao;
 };
 typedef struct player player;
 
