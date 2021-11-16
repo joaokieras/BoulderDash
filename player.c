@@ -80,8 +80,8 @@ int testa_terreno(player* jogador, int** mapa, int direcao){
   	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x - 1] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
+  	  	  return 1;
   	    }
-  	  	return 1;
   	  }
   	  break;
   	case 1:
@@ -89,8 +89,8 @@ int testa_terreno(player* jogador, int** mapa, int direcao){
   	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y][x + 1] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
+  	  	  return 1;
   	    }
-  	  	return 1;
   	  }
   	  break;
   	case 2:
@@ -98,8 +98,8 @@ int testa_terreno(player* jogador, int** mapa, int direcao){
   	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y - 1][x] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
+  	  	  return 1;
   	    }
-  	  	return 1;
   	  }
   	  break;
   	case 3:
@@ -107,8 +107,8 @@ int testa_terreno(player* jogador, int** mapa, int direcao){
   	  	if(jogador->tired % 5 == 0){
   	  	  mapa[y + 1][x] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
+  	  	  return 1;
   	    }
-  	  	return 1;
   	  }
   	  break;
   }

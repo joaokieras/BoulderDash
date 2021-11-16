@@ -77,6 +77,7 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
           	objetos_mapa->ciclos_diamante = 0;
           if(frames % 30 == 0)
             objetos_mapa->ciclos_diamante++;
+          testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
   	  }
@@ -84,9 +85,12 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
 }
 
 void testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames){
-  if(mapa[i + 1][j] == VAZIO && (frames % 20 == 0)){
+  if(mapa[i + 1][j] == VAZIO && frames % 10 == 0){
+  	if(mapa[i][j] == PEDRA)
+  	  mapa[i + 1][j] = PEDRA;
+  	else
+  	  mapa[i + 1][j] = DIAMANTE;
   	mapa[i][j] = VAZIO;
-  	mapa[i + 1][j] = PEDRA;
-  	al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j * SIZE_OBJS, i * SIZE_OBJS + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+  	//al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j * SIZE_OBJS, i * SIZE_OBJS + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   }
 }

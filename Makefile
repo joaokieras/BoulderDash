@@ -20,4 +20,4 @@ clean:
 	-rm -f *~ *.o
 
 purge:
-	-rm -f $(EXEC)
+	-rm -f $(OBJS) $(EXEC)
