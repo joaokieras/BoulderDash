@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "game.h"
 #include "mapa.h"
+#include "sprites.h"
 
 int** inicia_mapa(char* nome_mapa){
   FILE *arq;
@@ -33,20 +34,8 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
     fprintf(stderr, "Erro ao alocar memória!\n");
     exit(1);
   }
+  inicia_sprites_objetos(sheet, obj);
   obj->ciclos_diamante = 0;
-  obj->metal = al_create_sub_bitmap(sheet, 0, 48, 15, 16);
-  obj->terra = al_create_sub_bitmap(sheet, 48, 48, 15, 16);
-  obj->muro  = al_create_sub_bitmap(sheet, 32, 48, 15, 16);
-  obj->pedra = al_create_sub_bitmap(sheet, 80, 48, 15, 16);
-  obj->vazio = al_create_sub_bitmap(sheet, 96, 48, 15, 16);
-  obj->diamante[0] = al_create_sub_bitmap(sheet, 0, 64, 15, 16);
-  obj->diamante[1] = al_create_sub_bitmap(sheet, 16, 64, 15, 16);
-  obj->diamante[2] = al_create_sub_bitmap(sheet, 0, 80, 15, 16);
-  obj->diamante[3] = al_create_sub_bitmap(sheet, 16, 80, 15, 16);
-  obj->diamante[4] = al_create_sub_bitmap(sheet, 0, 96, 15, 16);
-  obj->diamante[5] = al_create_sub_bitmap(sheet, 16, 96, 15, 16);
-  obj->diamante[6] = al_create_sub_bitmap(sheet, 0, 112, 15, 16);
-  obj->diamante[7] = al_create_sub_bitmap(sheet, 16, 112, 15, 16);
 }
 
 void draw_map(int** mapa, objetos* objetos_mapa, long frames){
@@ -66,7 +55,8 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
   	  	  al_draw_scaled_bitmap(objetos_mapa->muro, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   	  	  break;
         case PEDRA:
-          testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+          if(frames % 10 == 0)
+          	testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case VAZIO:
@@ -85,12 +75,31 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
 }
 
 void testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames){
-  if(mapa[i + 1][j] == VAZIO && frames % 10 == 0){
+  //Testa rolamento para os lados
+  //Testa se está no topo da pilha
+  if((mapa[i + 1][j] == PEDRA || mapa[i + 1][j] == DIAMANTE) && (mapa[i - 1][j] != PEDRA || mapa[i - 1][j] != DIAMANTE)){
+  	if(mapa[i][j + 1] == VAZIO && mapa[i + 1][j + 1] == VAZIO){
+  	  if(mapa[i][j] == PEDRA)
+  	    mapa[i][j + 1] = PEDRA;
+  	  else
+  	    mapa[i][j + 1] = DIAMANTE;	 
+  	  mapa[i][j] = VAZIO;
+  	}
+  	if(mapa[i][j - 1] == VAZIO && mapa[i + 1][j - 1] == VAZIO){
+  	  if(mapa[i][j] == PEDRA)
+  	    mapa[i][j - 1] = PEDRA;
+  	  else
+  	    mapa[i][j - 1] = DIAMANTE;	 
+  	  mapa[i][j] = VAZIO;
+  	}
+  }
+
+  //Testa desabamento normal
+  if(mapa[i + 1][j] == VAZIO){
   	if(mapa[i][j] == PEDRA)
   	  mapa[i + 1][j] = PEDRA;
   	else
   	  mapa[i + 1][j] = DIAMANTE;
   	mapa[i][j] = VAZIO;
-  	//al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j * SIZE_OBJS, i * SIZE_OBJS + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   }
 }

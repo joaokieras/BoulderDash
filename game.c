@@ -3,6 +3,7 @@
 #include "game.h"
 #include "mapa.h"
 #include "player.h"
+#include "sprites.h"
 
 ALLEGRO_TIMER* timer;
 ALLEGRO_EVENT event;

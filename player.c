@@ -3,6 +3,7 @@
 #include "game.h"
 #include "mapa.h"
 #include "player.h"
+#include "sprites.h"
 
 player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   player *jogador;
@@ -22,20 +23,8 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->flag_up = 0;
   jogador->flag_down = 0;
   jogador->flag_left = 0;
-  jogador->flag_right = 0;
-
-  jogador->player_parado[0] = al_create_sub_bitmap(sheet, 0, 0, 15, 16);
-  for(int i = 1;i <= 6;i++)
-    jogador->player_parado[i] = al_create_sub_bitmap(sheet, (16 * i), 0, 15, 16);	
-
-  jogador->player_esquerda[0] = al_create_sub_bitmap(sheet, 0, 16, 15, 16);
-  for(int i = 1;i <= 6;i++)
-    jogador->player_esquerda[i] = al_create_sub_bitmap(sheet, (16 * i), 16, 15, 16);	
-
-  jogador->player_direita[0] = al_create_sub_bitmap(sheet, 0, 32, 15, 16);
-  for(int i = 1;i <= 6;i++)
-    jogador->player_direita[i] = al_create_sub_bitmap(sheet, (16 * i), 32, 15, 16);	
-
+  jogador->flag_right = 0;	
+  inicia_sprites_jogador(sheet, jogador);
   return jogador;
 }
 
