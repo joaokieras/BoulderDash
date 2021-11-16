@@ -66,8 +66,8 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
   	  	  al_draw_scaled_bitmap(objetos_mapa->muro, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   	  	  break;
         case PEDRA:
-          if(!testa_desmoronamento(mapa, objetos_mapa, i, j, frames))
-            al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+          al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case VAZIO:
           al_draw_scaled_bitmap(objetos_mapa->vazio, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
@@ -83,13 +83,10 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
   	}
 }
 
-int testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames){
-  if(mapa[i + 1][j] == VAZIO){
+void testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames){
+  if(mapa[i + 1][j] == VAZIO && (frames % 20 == 0)){
   	mapa[i][j] = VAZIO;
   	mapa[i + 1][j] = PEDRA;
-  	if(frames % 30 == 0)
-  	  al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j * SIZE_OBJS, i * SIZE_OBJS + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
-  	return 1;
+  	al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j * SIZE_OBJS, i * SIZE_OBJS + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   }
-  return 0;
 }

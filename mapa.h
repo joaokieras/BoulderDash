@@ -29,7 +29,7 @@ struct objetos{
 typedef struct objetos objetos;
 
 void draw_map(int** mapa, objetos* objetos_mapa, long frames);
-int testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames);
+void testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames);
 int** inicia_mapa(char* nome_mapa);
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet);
 
