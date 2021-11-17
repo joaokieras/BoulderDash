@@ -9,10 +9,16 @@
 
 void inicia_sprites_objetos(ALLEGRO_BITMAP* sheet, objetos* obj){
   obj->metal = al_create_sub_bitmap(sheet, 0, 48, 15, 16);
-  obj->terra = al_create_sub_bitmap(sheet, 48, 48, 15, 16);
   obj->muro  = al_create_sub_bitmap(sheet, 32, 48, 15, 16);
+  obj->terra = al_create_sub_bitmap(sheet, 48, 48, 15, 16);
   obj->pedra = al_create_sub_bitmap(sheet, 80, 48, 15, 16);
   obj->vazio = al_create_sub_bitmap(sheet, 96, 48, 15, 16);
+  
+  obj->explosao[0] = al_create_sub_bitmap(sheet, 96, 48, 15, 16);
+  obj->explosao[2] = al_create_sub_bitmap(sheet, 112, 64, 15, 16);
+  obj->explosao[1] = al_create_sub_bitmap(sheet, 128, 64, 15, 16);
+  obj->explosao[3] = al_create_sub_bitmap(sheet, 128, 80, 15, 16);
+
   obj->diamante[0] = al_create_sub_bitmap(sheet, 0, 64, 15, 16);
   obj->diamante[2] = al_create_sub_bitmap(sheet, 0, 80, 15, 16);
   obj->diamante[4] = al_create_sub_bitmap(sheet, 0, 96, 15, 16);

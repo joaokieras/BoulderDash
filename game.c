@@ -82,6 +82,7 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
+  	  	//atualiza_mapa_anterior(mapa, mapa_anterior);
   	  	/*for(int i = 0;i < 22;i++){
   	  	  for(int j = 0;j < 40;j++){
   	  	  	if(mapa[i][j] == PEDRA && frames % 10 == 0)

@@ -55,11 +55,11 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   }
   inicia_sprites_objetos(sheet, obj);
   obj->ciclos_diamante = 0;
+  obj->ciclos_explosao = 0;
 }
 
 void draw_map(int** mapa, int** mapa_anterior, objetos* objetos_mapa, long frames){
   int i, j, i_aux, j_aux;
-  atualiza_mapa_anterior(mapa, mapa_anterior);
   for(i = 0;i < 22;i++){
   	for(j = 0;j < 40;j++){
   	  i_aux = i * SIZE_OBJS;
@@ -86,8 +86,17 @@ void draw_map(int** mapa, int** mapa_anterior, objetos* objetos_mapa, long frame
           	objetos_mapa->ciclos_diamante = 0;
           if(frames % 30 == 0)
             objetos_mapa->ciclos_diamante++;
-          //testa_desmoronamento(mapa, mapa_anterior,objetos_mapa, i, j, frames);
+          testa_desmoronamento(mapa, mapa_anterior,objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          break;
+        case EXPLOSAO:
+          if(objetos_mapa->ciclos_explosao == 3){
+          	objetos_mapa->ciclos_explosao = 0;
+          	mapa[i][j] = VAZIO;
+          }
+          if(frames % 30 == 0)
+            objetos_mapa->ciclos_explosao++;
+          al_draw_scaled_bitmap(objetos_mapa->explosao[objetos_mapa->ciclos_explosao], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
   	  }
   	}
@@ -103,16 +112,15 @@ void atualiza_mapa_anterior(int** mapa_original, int** mapa_anterior){
 }
 
 void testa_desmoronamento(int** mapa, int** mapa_anterior, objetos* objetos_mapa, int i, int j, long frames){
-  if(frames % 15 != 0)
+  if(frames % 5 != 0)
   	return;
-  if(mapa[i + 1][j] == PLAYER){
-  	if(mapa_anterior[i - 1][j] == PEDRA && mapa_anterior[i + 1][j] == PLAYER){
+  //Testa colisão com o personagem
+  /*if(mapa[i + 1][j] == PLAYER){
+  	if((mapa_anterior[i - 1][j] == PEDRA || mapa_anterior[i][j] == PEDRA) && mapa_anterior[i + 1][j] == PLAYER){
   	  mapa[i + 1][j] = PEDRA;
   	  mapa[i][j] = VAZIO;
-  	  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "MORREU");
-  	  al_flip_display();
   	}
-  }
+  }*/
   //Testa rolamento para os lados
   //Testa se está no topo da pilha
   if((mapa[i + 1][j] == PEDRA || mapa[i + 1][j] == DIAMANTE) && (mapa[i - 1][j] != PEDRA || mapa[i - 1][j] != DIAMANTE)){

@@ -18,6 +18,7 @@
 #define DIAMANTE 4
 #define VAZIO    5
 #define PLAYER   6
+#define EXPLOSAO 7
 
 struct objetos{
   ALLEGRO_BITMAP* terra;
@@ -26,7 +27,8 @@ struct objetos{
   ALLEGRO_BITMAP* pedra;
   ALLEGRO_BITMAP* vazio;
   ALLEGRO_BITMAP* diamante[8];
-  int ciclos_diamante;
+  ALLEGRO_BITMAP* explosao[4];
+  int ciclos_diamante, ciclos_explosao;
 };
 typedef struct objetos objetos;
 
