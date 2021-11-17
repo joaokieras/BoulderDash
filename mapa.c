@@ -109,7 +109,6 @@ void testa_desmoronamento(int** mapa, int** mapa_anterior, objetos* objetos_mapa
   	if(mapa_anterior[i - 1][j] == PEDRA && mapa_anterior[i + 1][j] == PLAYER){
   	  mapa[i + 1][j] = PEDRA;
   	  mapa[i][j] = VAZIO;
-  	  //usleep(200000);
   	  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "MORREU");
   	  al_flip_display();
   	}
@@ -117,14 +116,14 @@ void testa_desmoronamento(int** mapa, int** mapa_anterior, objetos* objetos_mapa
   //Testa rolamento para os lados
   //Testa se está no topo da pilha
   if((mapa[i + 1][j] == PEDRA || mapa[i + 1][j] == DIAMANTE) && (mapa[i - 1][j] != PEDRA || mapa[i - 1][j] != DIAMANTE)){
-  	if(mapa[i][j + 1] == VAZIO && (mapa[i + 1][j + 1] == VAZIO || mapa[i + 1][j + 1] == PLAYER)){
+  	if(mapa[i][j + 1] == VAZIO && mapa[i + 1][j + 1] == VAZIO){
   	  if(mapa[i][j] == PEDRA)
   	    mapa[i][j + 1] = PEDRA;
   	  else if(mapa[i][j] == DIAMANTE)
   	    mapa[i][j + 1] = DIAMANTE;	 
   	  mapa[i][j] = VAZIO;
   	}
-  	if(mapa[i][j - 1] == VAZIO && (mapa[i + 1][j - 1] == VAZIO || mapa[i + 1][j - 1] == PLAYER)){
+  	if(mapa[i][j - 1] == VAZIO && mapa[i + 1][j - 1] == VAZIO){
   	  if(mapa[i][j] == PEDRA)
   	    mapa[i][j - 1] = PEDRA;
   	  else if(mapa[i][j] == DIAMANTE)
