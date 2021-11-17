@@ -2,9 +2,12 @@
 // GRR 20190379 Dinf - UFPR
 #include <stdio.h>
 #include <stdlib.h>
+#include <allegro5/allegro_font.h>
 #include "game.h"
 #include "mapa.h"
 #include "sprites.h"
+
+ALLEGRO_FONT* font;
 
 int** inicia_mapa(char* nome_mapa){
   FILE *arq;
@@ -28,6 +31,21 @@ int** inicia_mapa(char* nome_mapa){
   return mapa;
 }
 
+int** inicia_mapa_anterior(){
+  int i, j;
+  int** mapa_anterior;
+
+  mapa_anterior = malloc(22 * sizeof(int*));
+  for(i = 0;i < 22;i++)
+  	mapa_anterior[i] = malloc(40 * sizeof(int));
+
+  for(i = 0;i < 22;i++)
+  	for(j = 0;j < 40;j++)
+  	  mapa_anterior[i][j] = 5;
+ 
+  return mapa_anterior;
+}
+
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   objetos *obj;
   obj = malloc(sizeof(objetos));
@@ -39,9 +57,10 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   obj->ciclos_diamante = 0;
 }
 
-void draw_map(int** mapa, objetos* objetos_mapa, long frames){
+void draw_map(int** mapa, int** mapa_anterior, objetos* objetos_mapa, long frames){
   int i, j, i_aux, j_aux;
-  for(i = 0;i < 22;i++)
+  atualiza_mapa_anterior(mapa, mapa_anterior);
+  for(i = 0;i < 22;i++){
   	for(j = 0;j < 40;j++){
   	  i_aux = i * SIZE_OBJS;
   	  j_aux = j * SIZE_OBJS;
@@ -56,8 +75,7 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
   	  	  al_draw_scaled_bitmap(objetos_mapa->muro, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   	  	  break;
         case PEDRA:
-          if(frames % 10 == 0)
-          	testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+          testa_desmoronamento(mapa, mapa_anterior, objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case VAZIO:
@@ -68,38 +86,57 @@ void draw_map(int** mapa, objetos* objetos_mapa, long frames){
           	objetos_mapa->ciclos_diamante = 0;
           if(frames % 30 == 0)
             objetos_mapa->ciclos_diamante++;
-          testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+          //testa_desmoronamento(mapa, mapa_anterior,objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
   	  }
   	}
+  } 
 }
 
-void testa_desmoronamento(int** mapa, objetos* objetos_mapa, int i, int j, long frames){
+void atualiza_mapa_anterior(int** mapa_original, int** mapa_anterior){
+  int i, j;
+
+  for(i = 0;i < 22;i++)
+    for(j = 0;j < 40;j++)
+      mapa_anterior[i][j] = mapa_original[i][j];
+}
+
+void testa_desmoronamento(int** mapa, int** mapa_anterior, objetos* objetos_mapa, int i, int j, long frames){
+  if(frames % 15 != 0)
+  	return;
+  if(mapa[i + 1][j] == PLAYER){
+  	if(mapa_anterior[i - 1][j] == PEDRA && mapa_anterior[i + 1][j] == PLAYER){
+  	  mapa[i + 1][j] = PEDRA;
+  	  mapa[i][j] = VAZIO;
+  	  //usleep(200000);
+  	  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "MORREU");
+  	  al_flip_display();
+  	}
+  }
   //Testa rolamento para os lados
   //Testa se está no topo da pilha
   if((mapa[i + 1][j] == PEDRA || mapa[i + 1][j] == DIAMANTE) && (mapa[i - 1][j] != PEDRA || mapa[i - 1][j] != DIAMANTE)){
-  	if(mapa[i][j + 1] == VAZIO && mapa[i + 1][j + 1] == VAZIO){
+  	if(mapa[i][j + 1] == VAZIO && (mapa[i + 1][j + 1] == VAZIO || mapa[i + 1][j + 1] == PLAYER)){
   	  if(mapa[i][j] == PEDRA)
   	    mapa[i][j + 1] = PEDRA;
-  	  else
+  	  else if(mapa[i][j] == DIAMANTE)
   	    mapa[i][j + 1] = DIAMANTE;	 
   	  mapa[i][j] = VAZIO;
   	}
-  	if(mapa[i][j - 1] == VAZIO && mapa[i + 1][j - 1] == VAZIO){
+  	if(mapa[i][j - 1] == VAZIO && (mapa[i + 1][j - 1] == VAZIO || mapa[i + 1][j - 1] == PLAYER)){
   	  if(mapa[i][j] == PEDRA)
   	    mapa[i][j - 1] = PEDRA;
-  	  else
+  	  else if(mapa[i][j] == DIAMANTE)
   	    mapa[i][j - 1] = DIAMANTE;	 
   	  mapa[i][j] = VAZIO;
   	}
   }
-
   //Testa desabamento normal
   if(mapa[i + 1][j] == VAZIO){
   	if(mapa[i][j] == PEDRA)
   	  mapa[i + 1][j] = PEDRA;
-  	else
+  	else if(mapa[i][j] == DIAMANTE)
   	  mapa[i + 1][j] = DIAMANTE;
   	mapa[i][j] = VAZIO;
   }

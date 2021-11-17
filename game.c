@@ -17,7 +17,7 @@ ALLEGRO_BITMAP* sheet;
 player *jogador;
 objetos *objetos_mapa;
 
-int **mapa;
+int **mapa, **mapa_anterior;
 long frames = 0;
 
 void inicia_allegro(bool teste, char *descricao){
@@ -43,7 +43,7 @@ void state_init(){
   jogador = inicia_jogador(sheet);
   objetos_mapa = inicia_objetos(sheet);
   mapa = inicia_mapa(PATH_MAP_1);
-  
+  mapa_anterior = inicia_mapa_anterior();
 
   //al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   //al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -82,6 +82,12 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
+  	  	/*for(int i = 0;i < 22;i++){
+  	  	  for(int j = 0;j < 40;j++){
+  	  	  	if(mapa[i][j] == PEDRA && frames % 10 == 0)
+  	  	  	  testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+  	  	  }
+  	  	}*/
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
@@ -124,7 +130,7 @@ void draw(player *jogador, bool redraw, long frames){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
-  draw_map(mapa, objetos_mapa, frames);
+  draw_map(mapa, mapa_anterior, objetos_mapa, frames);
   draw_player(jogador, mapa, frames);
   al_flip_display();
   redraw = false;
