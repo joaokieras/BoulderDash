@@ -160,19 +160,13 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, l
   	if((mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == DIAMANTE) && 
   	  (mapa[pos_x - 1][pos_y] != PEDRA || mapa[pos_x - 1][pos_y] != DIAMANTE)){
   	  if(mapa[pos_x][pos_y + 1] == VAZIO && mapa[pos_x + 1][pos_y + 1] == VAZIO){
-  	    //if(mapa[i][j] == PEDRA)
   	    objetos_mapa->rock[i].y++;
-  	    mapa[pos_x][pos_y + 1] = PEDRA;
-  	    //else if(mapa[i][j] == DIAMANTE)
-  	      //mapa[i][j + 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y + 1] = PEDRA;	 
   	    mapa[pos_x][pos_y] = VAZIO;
   	  }
   	  if(mapa[pos_x][pos_y - 1] == VAZIO && mapa[pos_x + 1][pos_y - 1] == VAZIO){
-  	    //if(mapa[i][j] == PEDRA)
   	    objetos_mapa->rock[i].y--;
-  	    mapa[pos_x][pos_y - 1] = PEDRA;
-  	    //else if(mapa[i][j] == DIAMANTE)
-  	      //mapa[i][j - 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y - 1] = PEDRA;	 
   	    mapa[pos_x][pos_y] = VAZIO;
   	  }
     }
@@ -229,19 +223,13 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
   	if((mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == DIAMANTE) && 
   	  (mapa[pos_x - 1][pos_y] != PEDRA || mapa[pos_x - 1][pos_y] != DIAMANTE)){
   	  if(mapa[pos_x][pos_y + 1] == VAZIO && mapa[pos_x + 1][pos_y + 1] == VAZIO){
-  	    //if(mapa[i][j] == PEDRA)
   	    objetos_mapa->diamond[i].y++;
-  	    mapa[pos_x][pos_y + 1] = DIAMANTE;
-  	    //else if(mapa[i][j] == DIAMANTE)
-  	      //mapa[i][j + 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y + 1] = DIAMANTE; 
   	    mapa[pos_x][pos_y] = VAZIO;
   	  }
   	  if(mapa[pos_x][pos_y - 1] == VAZIO && mapa[pos_x + 1][pos_y - 1] == VAZIO){
-  	    //if(mapa[i][j] == PEDRA)
   	    objetos_mapa->diamond[i].y--;
-  	    mapa[pos_x][pos_y - 1] = DIAMANTE;
-  	    //else if(mapa[i][j] == DIAMANTE)
-  	      //mapa[i][j - 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y - 1] = DIAMANTE;	 
   	    mapa[pos_x][pos_y] = VAZIO;
   	  }
     }

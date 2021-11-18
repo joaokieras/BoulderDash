@@ -77,14 +77,21 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
     switch(direcao){
   	case 0:
   	  //Verifica se há diamante
-  	  /*if(mapa[y][x - 1] == DIAMANTE){
-  	  	  mapa[y][x - 1] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  play_sound(som->diamante);
-  	  	  jogador->pontuacao += 40;
-  	  	  jogador->diamantes++;
-  	  	  return 1;
-  	  }*/
+  	  if(mapa[y][x - 1] == DIAMANTE){
+  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
+  	  	  if(obj->diamond[i].x == y && obj->diamond[i].y == x - 1){
+  	  	  	obj->diamond[i].x = 0;
+  	  	  	obj->diamond[i].y = 0;
+  	  	  	obj->diamond[i].caindo = 0;
+  	  	  }
+  	  	}
+  	  	mapa[y][x - 1] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	play_sound(som->diamante);
+  	  	jogador->pontuacao += 40;
+  	  	jogador->diamantes++;
+  	  	return 1;
+  	  }
   	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
   	  	if(mapa[y][x - 1] == TERRA)
   	  	  play_sound(som->terra);
@@ -106,14 +113,21 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  }*/
   	  break;
   	case 1:
-  	  /*if(mapa[y][x + 1] == DIAMANTE){
+  	  if(mapa[y][x + 1] == DIAMANTE){
+  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
+  	  	  if(obj->diamond[i].x == y && obj->diamond[i].y == x + 1){
+  	  	  	obj->diamond[i].x = 0;
+  	  	  	obj->diamond[i].y = 0;
+  	  	  	obj->diamond[i].caindo = 0;
+  	  	  }
+  	  	}
   	  	mapa[y][x + 1] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
   	  	jogador->pontuacao += 40;
   	  	jogador->diamantes++;
   	  	return 1;
-  	  }*/
+  	  }
   	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
   	  	if(mapa[y][x + 1] == TERRA)
   	  	  play_sound(som->terra);
@@ -134,14 +148,21 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  }*/
   	  break;
   	case 2:
-  	  /*if(mapa[y - 1][x] == DIAMANTE){
+  	  if(mapa[y - 1][x] == DIAMANTE){
+  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
+  	  	  if(obj->diamond[i].x == y - 1 && obj->diamond[i].y == x){
+  	  	  	obj->diamond[i].x = 0;
+  	  	  	obj->diamond[i].y = 0;
+  	  	  	obj->diamond[i].caindo = 0;
+  	  	  }
+  	  	}
   	  	mapa[y - 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
   	  	jogador->pontuacao += 40;
   	  	jogador->diamantes++;
   	  	return 1;
-  	  }*/
+  	  }
   	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
   	  	if(mapa[y - 1][x] == TERRA)
   	  	  play_sound(som->terra);
@@ -151,14 +172,21 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  }
   	  break;
   	case 3:
-  	  /*if(mapa[y + 1][x] == DIAMANTE){
+  	  if(mapa[y + 1][x] == DIAMANTE){
+  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
+  	  	  if(obj->diamond[i].x == y + 1 && obj->diamond[i].y == x){
+  	  	  	obj->diamond[i].x = 0;
+  	  	  	obj->diamond[i].y = 0;
+  	  	  	obj->diamond[i].caindo = 0;
+  	  	  }
+  	  	}
   	  	mapa[y + 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
   	  	jogador->pontuacao += 40;
   	  	jogador->diamantes++;
   	  	return 1;
-  	  }*/
+  	  }
   	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
   	  	if(mapa[y + 1][x] == TERRA)
   	  	  play_sound(som->terra);
