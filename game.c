@@ -91,6 +91,8 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
+  	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
+  	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;

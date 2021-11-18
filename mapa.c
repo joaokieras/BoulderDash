@@ -88,7 +88,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   	  	  al_draw_scaled_bitmap(objetos_mapa->muro, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   	  	  break;
         case PEDRA:
-          testa_desmoronamento_pedra(mapa, som, objetos_mapa, i, j, frames);
+          //testa_desmoronamento_pedra(mapa, som, objetos_mapa, frames);
           al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case VAZIO:
@@ -99,7 +99,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
           	objetos_mapa->ciclos_diamante = 0;
           if(frames % 30 == 0)
             objetos_mapa->ciclos_diamante++;
-          testa_desmoronamento_diamante(mapa, som, objetos_mapa, i, j, frames);
+          //testa_desmoronamento_diamante(mapa, som, objetos_mapa, frames);
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case EXPLOSAO:
@@ -116,7 +116,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   } 
 }
 
-void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames){
+void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   //if(frames % 5 != 0)
   	//return;
   //Testa colisão com o personagem
@@ -128,7 +128,6 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, i
   }*/
   //Testa rolamento para os lados
   //Testa se está no topo da pilha
-  int pos_x, pos_y;
 
   /*for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
   	pos_x = objetos_mapa->rock[i].x;
@@ -151,6 +150,9 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, i
   	}
   }*/
 
+  if(frames % 10 != 0)
+	  return;
+  int pos_x, pos_y;
   for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
   	pos_x = objetos_mapa->rock[i].x;
   	pos_y = objetos_mapa->rock[i].y;
@@ -216,7 +218,9 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, i
   }*/
 }
 
-void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames){
+void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, long frames){
+  if(frames % 10 != 0)
+  	return;	
   int pos_x, pos_y;
   for(int i = 0;i < objetos_mapa->qntd_diamonds;i++){
     pos_x = objetos_mapa->diamond[i].x;
