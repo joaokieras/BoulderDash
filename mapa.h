@@ -29,6 +29,7 @@ typedef struct rock rock;
 
 struct objetos{
   rock *rock;
+  rock *diamond;
   ALLEGRO_BITMAP* terra;
   ALLEGRO_BITMAP* muro;
   ALLEGRO_BITMAP* metal;
@@ -36,13 +37,14 @@ struct objetos{
   ALLEGRO_BITMAP* vazio;
   ALLEGRO_BITMAP* diamante[8];
   ALLEGRO_BITMAP* explosao[4];
-  int qntd_rocks;
+  int qntd_rocks, qntd_diamonds;
   int ciclos_diamante, ciclos_explosao;
 };
 typedef struct objetos objetos;
 
 void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames);
-void testa_desmoronamento(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames);
+void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames);
+void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames);
 int** inicia_mapa(char* nome_mapa, objetos* obj);
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet);
 

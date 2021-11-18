@@ -23,24 +23,35 @@ int** inicia_mapa(char* nome_mapa, objetos* obj){
   for(i = 0;i < lin;i++)
   	mapa[i] = malloc(col * sizeof(int));
   
-  int cont = 0;
+  int cont_pedras = 0, cont_diamantes = 0;
   for(i = 0;i < lin;i++)
   	for(j = 0;j < col;j++){
   	  fscanf(arq, "%d", &mapa[i][j]);
   	  if(mapa[i][j] == PEDRA)
-  	  	cont++;
+  	  	cont_pedras++;
+  	  if(mapa[i][j] == DIAMANTE)
+  	  	cont_diamantes++;
   	}
-  obj->qntd_rocks = cont;
-  obj->rock = malloc(cont * sizeof(rock));
+  obj->qntd_rocks = cont_pedras;
+  obj->qntd_diamonds = cont_diamantes;
+  obj->rock = malloc(cont_pedras * sizeof(rock));
+  obj->diamond = malloc(cont_diamantes * sizeof(rock));
 
-  cont = 0;
+  cont_pedras = 0;
+  cont_diamantes = 0;
   for(i = 0;i < lin;i++)
   	for(j = 0;j < col;j++){
   	  if(mapa[i][j] == PEDRA){
-  	  	obj->rock[cont].x = i;
-  	    obj->rock[cont].y = j;
-  	    obj->rock[cont].caindo = false;
-  	    cont++;
+  	  	obj->rock[cont_pedras].x = i;
+  	    obj->rock[cont_pedras].y = j;
+  	    obj->rock[cont_pedras].caindo = 0;
+  	    cont_pedras++;
+  	  }
+  	  if(mapa[i][j] == DIAMANTE){
+  	  	obj->diamond[cont_diamantes].x = i;
+  	    obj->diamond[cont_diamantes].y = j;
+  	    obj->diamond[cont_diamantes].caindo = 0;
+  	    cont_diamantes++;
   	  }
   	}
 
@@ -77,7 +88,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   	  	  al_draw_scaled_bitmap(objetos_mapa->muro, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
   	  	  break;
         case PEDRA:
-          testa_desmoronamento(mapa, som, objetos_mapa, i, j, frames);
+          testa_desmoronamento_pedra(mapa, som, objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->pedra, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case VAZIO:
@@ -88,7 +99,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
           	objetos_mapa->ciclos_diamante = 0;
           if(frames % 30 == 0)
             objetos_mapa->ciclos_diamante++;
-          //testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
+          testa_desmoronamento_diamante(mapa, som, objetos_mapa, i, j, frames);
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case EXPLOSAO:
@@ -105,7 +116,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   } 
 }
 
-void testa_desmoronamento(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames){
+void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames){
   //if(frames % 5 != 0)
   	//return;
   //Testa colisão com o personagem
@@ -203,4 +214,46 @@ void testa_desmoronamento(int** mapa, audio* som, objetos* objetos_mapa, int i, 
   	  mapa[i + 1][j] = DIAMANTE;
   	mapa[i][j] = VAZIO;
   }*/
+}
+
+void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames){
+  int pos_x, pos_y;
+  for(int i = 0;i < objetos_mapa->qntd_diamonds;i++){
+    pos_x = objetos_mapa->diamond[i].x;
+  	pos_y = objetos_mapa->diamond[i].y;
+
+  	if((mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == DIAMANTE) && 
+  	  (mapa[pos_x - 1][pos_y] != PEDRA || mapa[pos_x - 1][pos_y] != DIAMANTE)){
+  	  if(mapa[pos_x][pos_y + 1] == VAZIO && mapa[pos_x + 1][pos_y + 1] == VAZIO){
+  	    //if(mapa[i][j] == PEDRA)
+  	    objetos_mapa->diamond[i].y++;
+  	    mapa[pos_x][pos_y + 1] = DIAMANTE;
+  	    //else if(mapa[i][j] == DIAMANTE)
+  	      //mapa[i][j + 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y] = VAZIO;
+  	  }
+  	  if(mapa[pos_x][pos_y - 1] == VAZIO && mapa[pos_x + 1][pos_y - 1] == VAZIO){
+  	    //if(mapa[i][j] == PEDRA)
+  	    objetos_mapa->diamond[i].y--;
+  	    mapa[pos_x][pos_y - 1] = DIAMANTE;
+  	    //else if(mapa[i][j] == DIAMANTE)
+  	      //mapa[i][j - 1] = DIAMANTE;	 
+  	    mapa[pos_x][pos_y] = VAZIO;
+  	  }
+    }
+
+  	if(objetos_mapa->diamond[i].caindo == 1){
+  	  if(mapa[pos_x + 1][pos_y] != VAZIO && mapa[pos_x + 1][pos_y] != PLAYER && mapa[pos_x + 1][pos_y] != EXPLOSAO){
+  	  	play_sound(som->fall);
+  	    objetos_mapa->diamond[i].caindo = 0;
+  	  }
+  	}
+
+  	if(mapa[pos_x + 1][pos_y] == VAZIO){
+  	  objetos_mapa->diamond[i].caindo = 1;
+  	  objetos_mapa->diamond[i].x++;
+  	  mapa[pos_x + 1][pos_y] = DIAMANTE;
+  	  mapa[pos_x][pos_y] = VAZIO;
+  	}
+  }
 }
