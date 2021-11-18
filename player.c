@@ -101,16 +101,16 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  }
   	  //Empurra pedra à esquerda a cada 10 frames para ser mais demorado e "difícil"
   	  //Se [vazio][pedra][player], então -> [pedra][player][vazio]
-  	  /*if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
+  	  if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
   	  	for(int i = 0;i < obj->qntd_rocks;i++){
-  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x)
-  	  	  	obj->rock[i].y -= 2;
+  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x - 1)
+  	  	  	obj->rock[i].y--;
   	  	}
-  	  	  mapa[y][x - 1] = PLAYER;
-  	  	  mapa[y][x - 2] = PEDRA;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
-  	  }*/
+  	  	mapa[y][x - 1] = PLAYER;
+  	  	mapa[y][x - 2] = PEDRA;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
+  	  }
   	  break;
   	case 1:
   	  if(mapa[y][x + 1] == DIAMANTE){
@@ -136,16 +136,16 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	return 1;
   	  }
   	  //Empurra pedra à direita
-  	  /*if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
+  	  if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
   	  	for(int i = 0;i < obj->qntd_rocks;i++){
-  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x)
-  	  	  	obj->rock[i].y += 2;
+  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x + 1)
+  	  	  	obj->rock[i].y++;
   	  	}
-  	  	  mapa[y][x + 1] = PLAYER;
-  	  	  mapa[y][x + 2] = PEDRA;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
-  	  }*/
+  	  	mapa[y][x + 1] = PLAYER;
+  	  	mapa[y][x + 2] = PEDRA;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
+  	  }
   	  break;
   	case 2:
   	  if(mapa[y - 1][x] == DIAMANTE){
