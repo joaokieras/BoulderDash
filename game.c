@@ -42,7 +42,7 @@ void state_init(){
   inicia_allegro(sheet, "spritesheet"); 
   jogador = inicia_jogador(sheet);
   objetos_mapa = inicia_objetos(sheet);
-  mapa = inicia_mapa(PATH_MAP_1);
+  mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
   mapa_anterior = inicia_mapa_anterior();
 
   //al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
@@ -131,8 +131,9 @@ void draw(player *jogador, bool redraw, long frames){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 900, 0, 0, "qtd:%d", objetos_mapa->qntd_rocks);
   draw_map(mapa, mapa_anterior, objetos_mapa, frames);
-  draw_player(jogador, mapa, frames);
+  draw_player(jogador, mapa, objetos_mapa, frames);
   al_flip_display();
   redraw = false;
 }

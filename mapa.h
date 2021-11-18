@@ -20,7 +20,14 @@
 #define PLAYER   6
 #define EXPLOSAO 7
 
+struct rock{
+  int x, y;
+  bool caindo;
+};
+typedef struct rock rock;
+
 struct objetos{
+  rock *rock;
   ALLEGRO_BITMAP* terra;
   ALLEGRO_BITMAP* muro;
   ALLEGRO_BITMAP* metal;
@@ -28,13 +35,14 @@ struct objetos{
   ALLEGRO_BITMAP* vazio;
   ALLEGRO_BITMAP* diamante[8];
   ALLEGRO_BITMAP* explosao[4];
+  int qntd_rocks;
   int ciclos_diamante, ciclos_explosao;
 };
 typedef struct objetos objetos;
 
 void draw_map(int** mapa, int** mapa_anterior, objetos* objetos_mapa, long frames);
 void testa_desmoronamento(int** mapa, int** mapa_anterior,  objetos* objetos_mapa, int i, int j, long frames);
-int** inicia_mapa(char* nome_mapa);
+int** inicia_mapa(char* nome_mapa, objetos* obj);
 int** inicia_mapa_anterior();
 void atualiza_mapa_anterior(int** mapa_original, int** mapa_anterior);
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet);
