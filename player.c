@@ -115,7 +115,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	return 1;
   	  }
   	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
-  	  	if(mapa[y][x - 1] == TERRA)
+  	  	if(mapa[y][x + 1] == TERRA)
   	  	  play_sound(som->terra);
   	  	mapa[y][x + 1] = PLAYER;
   	  	mapa[y][x] = VAZIO;
@@ -143,7 +143,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	return 1;
   	  }
   	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
-  	  	if(mapa[y][x - 1] == TERRA)
+  	  	if(mapa[y - 1][x] == TERRA)
   	  	  play_sound(som->terra);
   	  	mapa[y - 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;
@@ -160,7 +160,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	return 1;
   	  }
   	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
-  	  	if(mapa[y][x - 1] == TERRA)
+  	  	if(mapa[y + 1][x] == TERRA)
   	  	  play_sound(som->terra);
   	  	mapa[y + 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;

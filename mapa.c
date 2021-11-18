@@ -165,8 +165,7 @@ void testa_desmoronamento(int** mapa, audio* som, objetos* objetos_mapa, int i, 
     }
     //Verifica se chegou no chão
   	if(objetos_mapa->rock[i].caindo == 1){
-  	  if(mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == MURO || 
-  	  	 mapa[pos_x + 1][pos_y] == METAL || mapa[pos_x + 1][pos_y] == DIAMANTE){
+  	  if(mapa[pos_x + 1][pos_y] != VAZIO && mapa[pos_x + 1][pos_y] != PLAYER && mapa[pos_x + 1][pos_y] != EXPLOSAO){
   	  	play_sound(som->fall);
   	    objetos_mapa->rock[i].caindo = 0;
   	  }

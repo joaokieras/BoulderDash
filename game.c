@@ -91,13 +91,6 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
-  	  	//atualiza_mapa_anterior(mapa, mapa_anterior);
-  	  	/*for(int i = 0;i < 22;i++){
-  	  	  for(int j = 0;j < 40;j++){
-  	  	  	if(mapa[i][j] == PEDRA && frames % 10 == 0)
-  	  	  	  testa_desmoronamento(mapa, objetos_mapa, i, j, frames);
-  	  	  }
-  	  	}*/
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
