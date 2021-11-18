@@ -10,6 +10,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
 #include "game.h"
+#include "sons.h"
 
 #define METAL    0
 #define TERRA    1
@@ -22,7 +23,7 @@
 
 struct rock{
   int x, y;
-  bool caindo;
+  int caindo;
 };
 typedef struct rock rock;
 
@@ -40,11 +41,9 @@ struct objetos{
 };
 typedef struct objetos objetos;
 
-void draw_map(int** mapa, int** mapa_anterior, objetos* objetos_mapa, long frames);
-void testa_desmoronamento(int** mapa, int** mapa_anterior,  objetos* objetos_mapa, int i, int j, long frames);
+void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames);
+void testa_desmoronamento(int** mapa, audio* som, objetos* objetos_mapa, int i, int j, long frames);
 int** inicia_mapa(char* nome_mapa, objetos* obj);
-int** inicia_mapa_anterior();
-void atualiza_mapa_anterior(int** mapa_original, int** mapa_anterior);
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet);
 
 #endif

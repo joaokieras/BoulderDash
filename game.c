@@ -6,6 +6,7 @@
 #include "mapa.h"
 #include "player.h"
 #include "sprites.h"
+#include "sons.h"
 
 ALLEGRO_TIMER* timer;
 ALLEGRO_EVENT event;
@@ -16,8 +17,9 @@ ALLEGRO_BITMAP* sheet;
 
 player *jogador;
 objetos *objetos_mapa;
+audio *sons_jogo;
 
-int **mapa, **mapa_anterior;
+int **mapa;
 long frames = 0;
 
 void inicia_allegro(bool teste, char *descricao){
@@ -40,14 +42,21 @@ void state_init(){
   inicia_allegro(al_init_image_addon(), "image addon");
   sheet = al_load_bitmap(PATH_SPRITESHEET);
   inicia_allegro(sheet, "spritesheet"); 
+
+  inicia_allegro(al_install_audio(), "audio");
+  inicia_allegro(al_init_acodec_addon(), "audio codecs");
+  inicia_allegro(al_reserve_samples(16), "reserve samples");
+
   jogador = inicia_jogador(sheet);
   objetos_mapa = inicia_objetos(sheet);
   mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
-  mapa_anterior = inicia_mapa_anterior();
+  sons_jogo = inicializa_sons();
+  al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
+  //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
 
-  //al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
-  //al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
-  //al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
+  al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
+  al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
+  al_set_new_bitmap_flags(ALLEGRO_MIN_LINEAR | ALLEGRO_MAG_LINEAR);
 
   disp = al_create_display(WIDTH, HEIGHT);
   inicia_allegro(disp, "display");
@@ -103,7 +112,7 @@ void state_play(){
   	if(done)
       break;
     if(redraw && al_is_event_queue_empty(queue))
-      draw(jogador, redraw, frames);
+      draw(redraw, frames);
     frames++;
   }
   state = FIMPART;
@@ -117,6 +126,7 @@ void state_end(){
 }
 
 void state_close(){
+  destroy_sounds(sons_jogo);
   al_destroy_bitmap(sheet);
   al_destroy_font(font);
   al_destroy_display(disp);
@@ -125,15 +135,15 @@ void state_close(){
   exit(1);
 }
 
-void draw(player *jogador, bool redraw, long frames){
+void draw(bool redraw, long frames){
   al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x/SIZE_OBJS, (jogador->pos_y - MARGIN_TOP)/SIZE_OBJS);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 900, 0, 0, "qtd:%d", objetos_mapa->qntd_rocks);
-  draw_map(mapa, mapa_anterior, objetos_mapa, frames);
-  draw_player(jogador, mapa, objetos_mapa, frames);
+  draw_map(mapa, sons_jogo, objetos_mapa, frames);
+  draw_player(jogador, sons_jogo, mapa, objetos_mapa, frames);
   al_flip_display();
   redraw = false;
 }

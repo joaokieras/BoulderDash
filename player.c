@@ -32,25 +32,25 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   return jogador;
 }
 
-void draw_player(player *jogador, int** mapa, objetos *obj, long frames){
+void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long frames){
   int andou = 1;
   if(jogador->flag_left){
-  	andou = testa_terreno(jogador, mapa, 0, obj, frames);
+  	andou = testa_terreno(jogador, som, mapa, 0, obj, frames);
   	atualiza_player(jogador, 0, andou);
     al_draw_scaled_bitmap(jogador->player_esquerda[jogador->ciclos_esq], 0, 0, 15, 17, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_right){
-  	andou = testa_terreno(jogador, mapa, 1, obj, frames);
+  	andou = testa_terreno(jogador, som, mapa, 1, obj, frames);
   	atualiza_player(jogador, 1, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_up){
-  	andou = testa_terreno(jogador, mapa, 2, obj, frames);
+  	andou = testa_terreno(jogador, som, mapa, 2, obj, frames);
   	atualiza_player(jogador, 2, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   }
   else if(jogador->flag_down){
-  	andou = testa_terreno(jogador, mapa, 3, obj, frames);
+  	andou = testa_terreno(jogador, som, mapa, 3, obj, frames);
   	atualiza_player(jogador, 3, andou);
     al_draw_scaled_bitmap(jogador->player_direita[jogador->ciclos_dir], 0, 0, 15, 16, jogador->pos_x, jogador->pos_y, SIZE_OBJS, SIZE_OBJS, 0);
   } 
@@ -63,7 +63,7 @@ void draw_player(player *jogador, int** mapa, objetos *obj, long frames){
     jogador->ciclos_parado = 0;
 }
 
-int testa_terreno(player* jogador, int** mapa, int direcao, objetos *obj, long frames){
+int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos *obj, long frames){
   int x, y;
   //Coordenadas do personagem dentro do mapa
   x = jogador->pos_x / SIZE_OBJS;
@@ -80,18 +80,21 @@ int testa_terreno(player* jogador, int** mapa, int direcao, objetos *obj, long f
   	  if(mapa[y][x - 1] == DIAMANTE){
   	  	  mapa[y][x - 1] = PLAYER;
   	  	  mapa[y][x] = VAZIO;
+  	  	  play_sound(som->diamante);
   	  	  jogador->pontuacao += 40;
   	  	  jogador->diamantes++;
   	  	  return 1;
   	  }
   	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
-  	  	  mapa[y][x - 1] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
+  	  	if(mapa[y][x - 1] == TERRA)
+  	  	  play_sound(som->terra);
+  	  	mapa[y][x - 1] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
   	  }
   	  //Empurra pedra à esquerda a cada 10 frames para ser mais demorado e "difícil"
   	  //Se [vazio][pedra][player], então -> [pedra][player][vazio]
-  	  if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
+  	  /*if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
   	  	for(int i = 0;i < obj->qntd_rocks;i++){
   	  	  if(obj->rock[i].x == y && obj->rock[i].y == x)
   	  	  	obj->rock[i].y -= 2;
@@ -100,23 +103,26 @@ int testa_terreno(player* jogador, int** mapa, int direcao, objetos *obj, long f
   	  	  mapa[y][x - 2] = PEDRA;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	  }
+  	  }*/
   	  break;
   	case 1:
   	  if(mapa[y][x + 1] == DIAMANTE){
-  	  	  mapa[y][x + 1] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  jogador->pontuacao += 40;
-  	  	  jogador->diamantes++;
-  	  	  return 1;
+  	  	mapa[y][x + 1] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	play_sound(som->diamante);
+  	  	jogador->pontuacao += 40;
+  	  	jogador->diamantes++;
+  	  	return 1;
   	  }
   	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
-  	  	  mapa[y][x + 1] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
+  	  	if(mapa[y][x - 1] == TERRA)
+  	  	  play_sound(som->terra);
+  	  	mapa[y][x + 1] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
   	  }
   	  //Empurra pedra à direita
-  	  if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
+  	  /*if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
   	  	for(int i = 0;i < obj->qntd_rocks;i++){
   	  	  if(obj->rock[i].x == y && obj->rock[i].y == x)
   	  	  	obj->rock[i].y += 2;
@@ -125,34 +131,40 @@ int testa_terreno(player* jogador, int** mapa, int direcao, objetos *obj, long f
   	  	  mapa[y][x + 2] = PEDRA;
   	  	  mapa[y][x] = VAZIO;
   	  	  return 1;
-  	  }
+  	  }*/
   	  break;
   	case 2:
   	  if(mapa[y - 1][x] == DIAMANTE){
-  	  	  mapa[y - 1][x] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  jogador->pontuacao += 40;
-  	  	  jogador->diamantes++;
-  	  	  return 1;
+  	  	mapa[y - 1][x] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	play_sound(som->diamante);
+  	  	jogador->pontuacao += 40;
+  	  	jogador->diamantes++;
+  	  	return 1;
   	  }
   	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
-  	  	  mapa[y - 1][x] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
+  	  	if(mapa[y][x - 1] == TERRA)
+  	  	  play_sound(som->terra);
+  	  	mapa[y - 1][x] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
   	  }
   	  break;
   	case 3:
   	  if(mapa[y + 1][x] == DIAMANTE){
-  	  	  mapa[y + 1][x] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  jogador->pontuacao += 40;
-  	  	  jogador->diamantes++;
-  	  	  return 1;
+  	  	mapa[y + 1][x] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	play_sound(som->diamante);
+  	  	jogador->pontuacao += 40;
+  	  	jogador->diamantes++;
+  	  	return 1;
   	  }
   	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
-  	  	  mapa[y + 1][x] = PLAYER;
-  	  	  mapa[y][x] = VAZIO;
-  	  	  return 1;
+  	  	if(mapa[y][x - 1] == TERRA)
+  	  	  play_sound(som->terra);
+  	  	mapa[y + 1][x] = PLAYER;
+  	  	mapa[y][x] = VAZIO;
+  	  	return 1;
   	  }
   	  break;
   }
