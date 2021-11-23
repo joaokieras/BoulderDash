@@ -104,15 +104,18 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
           break;
         case EXPLOSAO:
           al_draw_scaled_bitmap(objetos_mapa->explosao[1], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
-          mapa[i][j] = EXPLOSAO2;
+          if(frames % 15 == 0)
+            mapa[i][j] = EXPLOSAO2;
           break;
         case EXPLOSAO2:
           al_draw_scaled_bitmap(objetos_mapa->explosao[2], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
-          mapa[i][j] = EXPLOSAO3;
+          if(frames % 15 == 0)
+            mapa[i][j] = EXPLOSAO3;
           break;
         case EXPLOSAO3:
-          al_draw_scaled_bitmap(objetos_mapa->explosao[3], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
-          mapa[i][j] = VAZIO;
+          al_draw_scaled_bitmap(objetos_mapa->explosao[0], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          if(frames % 15 == 0)
+            mapa[i][j] = VAZIO;
           break;
   	  }
   	}
