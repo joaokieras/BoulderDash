@@ -12,14 +12,16 @@
 #include "game.h"
 #include "sons.h"
 
-#define METAL    0
-#define TERRA    1
-#define MURO     2
-#define PEDRA    3
-#define DIAMANTE 4
-#define VAZIO    5
-#define PLAYER   6
-#define EXPLOSAO 7
+#define METAL     0
+#define TERRA     1
+#define MURO      2
+#define PEDRA     3
+#define DIAMANTE  4
+#define VAZIO     5
+#define PLAYER    6
+#define EXPLOSAO  7
+#define EXPLOSAO2 8
+#define EXPLOSAO3 9
 
 struct rock{
   int x, y;
@@ -43,6 +45,7 @@ struct objetos{
 typedef struct objetos objetos;
 
 void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames);
+int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 int** inicia_mapa(char* nome_mapa, objetos* obj);

@@ -103,13 +103,16 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
           al_draw_scaled_bitmap(objetos_mapa->diamante[objetos_mapa->ciclos_diamante], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
         case EXPLOSAO:
-          if(objetos_mapa->ciclos_explosao == 3){
-          	//objetos_mapa->ciclos_explosao = 0;
-          	mapa[i][j] = VAZIO;
-          }
-          if(frames % 30 == 0)
-            objetos_mapa->ciclos_explosao++;
-          al_draw_scaled_bitmap(objetos_mapa->explosao[objetos_mapa->ciclos_explosao], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          al_draw_scaled_bitmap(objetos_mapa->explosao[1], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          mapa[i][j] = EXPLOSAO2;
+          break;
+        case EXPLOSAO2:
+          al_draw_scaled_bitmap(objetos_mapa->explosao[2], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          mapa[i][j] = EXPLOSAO3;
+          break;
+        case EXPLOSAO3:
+          al_draw_scaled_bitmap(objetos_mapa->explosao[3], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          mapa[i][j] = VAZIO;
           break;
   	  }
   	}
@@ -117,42 +120,10 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
 }
 
 void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames){
-  //if(frames % 5 != 0)
-  	//return;
-  //Testa colisão com o personagem
-  /*if(mapa[i + 1][j] == PLAYER){
-  	if((mapa_anterior[i - 1][j] == PEDRA || mapa_anterior[i][j] == PEDRA) && mapa_anterior[i + 1][j] == PLAYER){
-  	  mapa[i + 1][j] = PEDRA;
-  	  mapa[i][j] = VAZIO;
-  	}
-  }*/
-  //Testa rolamento para os lados
-  //Testa se está no topo da pilha
-
-  /*for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
-  	pos_x = objetos_mapa->rock[i].x;
-  	pos_y = objetos_mapa->rock[i].y;
-  	if(objetos_mapa->rock[i].caindo == 1){
-  	  if(mapa[pos_x + 1][pos_y] == PLAYER){
-  	  mapa[pos_x][pos_y] = EXPLOSAO;
-  	  mapa[pos_x][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
-  	  objetos_mapa->rock[i].y = 0;
-  	  objetos_mapa->rock[i].x = 0;
-  	  }
-  	  else if(mapa[pos_x + 1][pos_y] == TERRA || mapa[pos_x + 1][pos_y] == MURO || mapa[pos_x + 1][pos_y] == METAL)
-  	  	objetos_mapa->rock[i].caindo = 0;
-  	}
-  }*/
-
   if(frames % 10 != 0)
 	  return;
   int pos_x, pos_y;
+
   for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
   	pos_x = objetos_mapa->rock[i].x;
   	pos_y = objetos_mapa->rock[i].y;
@@ -185,31 +156,6 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, l
   	  mapa[pos_x][pos_y] = VAZIO;
   	}
   }
-  /*if((mapa[i + 1][j] == PEDRA || mapa[i + 1][j] == DIAMANTE) && (mapa[i - 1][j] != PEDRA || mapa[i - 1][j] != DIAMANTE)){
-  	if(mapa[i][j + 1] == VAZIO && mapa[i + 1][j + 1] == VAZIO){
-  	  if(mapa[i][j] == PEDRA)
-  	    mapa[i][j + 1] = PEDRA;
-  	  else if(mapa[i][j] == DIAMANTE)
-  	    mapa[i][j + 1] = DIAMANTE;	 
-  	  mapa[i][j] = VAZIO;
-  	}
-  	if(mapa[i][j - 1] == VAZIO && mapa[i + 1][j - 1] == VAZIO){
-  	  if(mapa[i][j] == PEDRA)
-  	    mapa[i][j - 1] = PEDRA;
-  	  else if(mapa[i][j] == DIAMANTE)
-  	    mapa[i][j - 1] = DIAMANTE;	 
-  	  mapa[i][j] = VAZIO;
-  	}
-  }
-  //Testa desabamento normal
-  if(mapa[i + 1][j] == VAZIO){
-  	if(mapa[i][j] == PEDRA){
-  	  mapa[i + 1][j] = PEDRA;
-  	}
-  	else if(mapa[i][j] == DIAMANTE)
-  	  mapa[i + 1][j] = DIAMANTE;
-  	mapa[i][j] = VAZIO;
-  }*/
 }
 
 void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, long frames){
@@ -248,4 +194,34 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
   	  mapa[pos_x][pos_y] = VAZIO;
   	}
   }
+}
+
+int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames){
+  if(frames % 10 != 0)
+  	return 0;
+  int pos_x, pos_y;
+
+  for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
+  	pos_x = objetos_mapa->rock[i].x;
+  	pos_y = objetos_mapa->rock[i].y;
+  	if(objetos_mapa->rock[i].caindo == 1){
+  	  if(mapa[pos_x + 1][pos_y] == PLAYER){
+  	  play_sound(som->fall);
+  	  mapa[pos_x + 1][pos_y] = EXPLOSAO;
+  	  mapa[pos_x][pos_y] = EXPLOSAO;
+  	  mapa[pos_x][pos_y + 1] = EXPLOSAO;
+  	  mapa[pos_x][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
+  	  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
+  	  objetos_mapa->rock[i].y = 0;
+  	  objetos_mapa->rock[i].x = 0;
+  	  objetos_mapa->rock[i].caindo = 0;
+  	  return 1;
+  	  }
+  	}
+  }
+  return 0;
 }
