@@ -47,7 +47,7 @@ struct objetos{
 typedef struct objetos objetos;
 
 void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames);
-int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames);
+int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, int tempo);
 void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 int** inicia_mapa(char* nome_mapa, objetos* obj);
