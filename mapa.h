@@ -22,6 +22,7 @@
 #define EXPLOSAO  7
 #define EXPLOSAO2 8
 #define EXPLOSAO3 9
+#define SAIDA     10
 
 struct rock{
   int x, y;
@@ -37,6 +38,7 @@ struct objetos{
   ALLEGRO_BITMAP* metal;
   ALLEGRO_BITMAP* pedra;
   ALLEGRO_BITMAP* vazio;
+  ALLEGRO_BITMAP* saida;
   ALLEGRO_BITMAP* diamante[8];
   ALLEGRO_BITMAP* explosao[4];
   int qntd_rocks, qntd_diamonds;

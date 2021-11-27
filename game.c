@@ -92,6 +92,7 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
+  	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
   	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames);

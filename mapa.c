@@ -109,6 +109,9 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
         case VAZIO:
           al_draw_scaled_bitmap(objetos_mapa->vazio, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
           break;
+        case SAIDA:
+          al_draw_scaled_bitmap(objetos_mapa->saida, 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
+          break;
         case DIAMANTE:
           if(objetos_mapa->ciclos_diamante == 7)
           	objetos_mapa->ciclos_diamante = 0;

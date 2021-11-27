@@ -263,3 +263,8 @@ void atualiza_player(player *jogador, int direcao, int andou){
   if(jogador->ciclos_dir == 7)
     jogador->ciclos_dir = 0;
 }
+
+void verifica_min_diamantes(int** mapa, player* jogador){
+  if(jogador->diamantes >= 10)
+  	mapa[16][38] = SAIDA;
+}
