@@ -242,11 +242,34 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames){
   	  }
   	}
   }
+  for(int i = 0;i < objetos_mapa->qntd_diamonds;i++){
+  	pos_x = objetos_mapa->diamond[i].x;
+  	pos_y = objetos_mapa->diamond[i].y;
+  	if(objetos_mapa->diamond[i].caindo == 1){
+  	  if(mapa[pos_x + 1][pos_y] == PLAYER){
+  	  play_sound(som->fall);
+  	  busca_diamantes_explosao(objetos_mapa, pos_x + 1, pos_y);
+  	  mapa[pos_x + 1][pos_y] = EXPLOSAO;
+  	  mapa[pos_x][pos_y] = EXPLOSAO;
+  	  mapa[pos_x][pos_y + 1] = EXPLOSAO;
+  	  mapa[pos_x][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
+  	  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y] = EXPLOSAO;
+  	  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
+  	  objetos_mapa->diamond[i].y = 0;
+  	  objetos_mapa->diamond[i].x = 0;
+  	  objetos_mapa->diamond[i].caindo = 0;
+  	  return 1;
+  	  }
+  	}
+  }
   return 0;
 }
 
 void busca_pedras_explosao(objetos* obj, int x, int y){
-  busca_e_destroi_pedra(obj, x - 1, y -1 );
+  busca_e_destroi_pedra(obj, x - 1, y - 1);
   busca_e_destroi_pedra(obj, x - 1, y);
   busca_e_destroi_pedra(obj, x - 1, y + 1);
   busca_e_destroi_pedra(obj, x, y - 1);
@@ -254,6 +277,17 @@ void busca_pedras_explosao(objetos* obj, int x, int y){
   busca_e_destroi_pedra(obj, x + 1, y - 1);
   busca_e_destroi_pedra(obj, x + 1, y);
   busca_e_destroi_pedra(obj, x + 1, y + 1);
+}
+
+void busca_diamantes_explosao(objetos* obj, int x, int y){
+  busca_e_destroi_diamante(obj, x - 1, y - 1);
+  busca_e_destroi_diamante(obj, x - 1, y);
+  busca_e_destroi_diamante(obj, x - 1, y + 1);
+  busca_e_destroi_diamante(obj, x, y - 1);
+  busca_e_destroi_diamante(obj, x, y + 1);
+  busca_e_destroi_diamante(obj, x + 1, y - 1);
+  busca_e_destroi_diamante(obj, x + 1, y);
+  busca_e_destroi_diamante(obj, x + 1, y + 1);
 }
 
 void busca_e_destroi_pedra(objetos* obj, int x, int y){

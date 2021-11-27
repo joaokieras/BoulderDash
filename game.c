@@ -102,7 +102,7 @@ void state_play(){
   	  	  jogador->pos_y = SPAWN_Y;
   	  	  //draw_explosion(mapa, jogador, objetos_mapa,frames);
   	  	}
-  	  	if(!jogador->vivo && frames % 165 == 0)
+  	  	if(!jogador->vivo && frames % TEMPO_RESET == 0)
   	  	  mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
