@@ -92,13 +92,18 @@ void state_play(){
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
   	  	verifica_entradas(key, &done, redraw, jogador);
-  	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
+  	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames);
   	  	if(morreu){
+  	      jogador->vivo = 0;
+  	      jogador->diamantes = 0;
   	  	  jogador->pos_x = SPAWN_X;
   	  	  jogador->pos_y = SPAWN_Y;
+  	  	  //draw_explosion(mapa, jogador, objetos_mapa,frames);
   	  	}
+  	  	if(!jogador->vivo && frames % 165 == 0)
+  	  	  mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
