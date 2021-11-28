@@ -116,7 +116,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	mapa[y][x - 1] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 40;
+  	  	jogador->pontuacao += 10;
   	  	jogador->diamantes++;
   	  	return 1;
   	  }
@@ -146,7 +146,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	mapa[y][x + 1] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 40;
+  	  	jogador->pontuacao += 10;
   	  	jogador->diamantes++;
   	  	return 1;
   	  }
@@ -181,7 +181,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	mapa[y - 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 40;
+  	  	jogador->pontuacao += 10;
   	  	jogador->diamantes++;
   	  	return 1;
   	  }
@@ -205,7 +205,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	  	mapa[y + 1][x] = PLAYER;
   	  	mapa[y][x] = VAZIO;
   	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 40;
+  	  	jogador->pontuacao += 10;
   	  	jogador->diamantes++;
   	  	return 1;
   	  }

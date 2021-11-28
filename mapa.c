@@ -141,7 +141,7 @@ void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
 }
 
 void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames){
-  if(frames % 10 != 0)
+  if(frames % 15 != 0)
 	  return;
   int pos_x, pos_y;
 
