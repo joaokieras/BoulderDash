@@ -19,7 +19,7 @@ player *jogador;
 objetos *objetos_mapa;
 audio *sons_jogo;
 
-int **mapa, tempo = 150;
+int **mapa, relogio = 150;
 long frames = 0;
 
 void inicia_allegro(bool teste, char *descricao){
@@ -95,20 +95,14 @@ void state_play(){
   	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
-  	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, tempo);
-  	  	if(morreu){
-  	      jogador->vivo = 0;
-  	      jogador->vidas--;
-  	      jogador->diamantes = 0;
-  	  	  jogador->pos_x = SPAWN_X;
-  	  	  jogador->pos_y = SPAWN_Y;
-  	  	  //draw_explosion(mapa, jogador, objetos_mapa,frames);
-  	  	}
+  	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
+  	  	if(morreu)
+  	  	  reseta_player(jogador);
   	  	if(frames % 60 == 0 && jogador->vivo)
-  	  	  tempo--;
+  	  	  relogio--;
   	  	if(!jogador->vivo && frames % TEMPO_RESET == 0){
   	  	  mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
-  	  	  tempo = 150;
+  	  	  relogio = 150;
   	  	}
   	  	break;
   	  case ALLEGRO_EVENT_KEY_DOWN:
@@ -155,7 +149,7 @@ void draw(bool redraw, long frames){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", tempo);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "Vidas: %d", jogador->vidas);
   draw_map(mapa, sons_jogo, objetos_mapa, frames);
   draw_player(jogador, sons_jogo, mapa, objetos_mapa, frames);

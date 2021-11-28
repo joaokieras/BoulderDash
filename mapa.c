@@ -68,7 +68,7 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   }
   inicia_sprites_objetos(sheet, obj);
   obj->ciclos_diamante = 0;
-  obj->ciclos_explosao = 0;
+  obj->ciclos_explosao = 1;
 }
 
 int** recarrega_mapa(char* nome_mapa, int** mapa_numerico){

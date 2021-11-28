@@ -245,3 +245,11 @@ void verifica_min_diamantes(int** mapa, player* jogador){
   if(jogador->diamantes >= 10)
   	mapa[16][38] = SAIDA;
 }
+
+void reseta_player(player* jogador){
+  jogador->vivo = 0;
+  jogador->vidas--;
+  jogador->diamantes = 0;
+  jogador->pos_x = SPAWN_X;
+  jogador->pos_y = SPAWN_Y;
+}
