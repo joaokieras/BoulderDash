@@ -98,6 +98,7 @@ void state_play(){
   	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, tempo);
   	  	if(morreu){
   	      jogador->vivo = 0;
+  	      jogador->vidas--;
   	      jogador->diamantes = 0;
   	  	  jogador->pos_x = SPAWN_X;
   	  	  jogador->pos_y = SPAWN_Y;
@@ -120,6 +121,8 @@ void state_play(){
         done = true;
         break;
   	}
+  	if(jogador->vidas < 0 && frames % TEMPO_RESET == 0)
+  	  break;
   	if(done)
       break;
     if(redraw && al_is_event_queue_empty(queue))
@@ -153,6 +156,7 @@ void draw(bool redraw, long frames){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", tempo);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "Vidas: %d", jogador->vidas);
   draw_map(mapa, sons_jogo, objetos_mapa, frames);
   draw_player(jogador, sons_jogo, mapa, objetos_mapa, frames);
   al_flip_display();

@@ -35,6 +35,5 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet);
 int testa_terreno(player *jogador, audio* som, int** mapa, int direcao, objetos *obj,long frames);
 void atualiza_player(player *jogador, int direcao, int andou);
 void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long frames);
-void draw_explosion(int** mapa, player* jogador, objetos* objetos_mapa, long frames);
 void verifica_min_diamantes(int** mapa, player* jogador);
 #endif

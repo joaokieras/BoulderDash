@@ -74,29 +74,6 @@ void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long fra
     jogador->ciclos_parado = 0;
 }
 
-void draw_explosion(int** mapa, player* jogador, objetos* objetos_mapa, long frames){
-  if(frames % 15 != 0)
-  	return;
-  printf("entrou\n");
-  int i, j, i_aux, j_aux;
-  for(i = 0;i < 22;i++){
-  	for(j = 0;j < 40;j++){
-  	  i_aux = i * SIZE_OBJS;
-  	  j_aux = j * SIZE_OBJS;
-  	  printf("exp2\n");
-  	  if(mapa[i][j] == EXPLOSAO){
-  	  	if(objetos_mapa->ciclos_explosao > 3){
-  		  mapa[i][j] = VAZIO;
-  		  jogador->vivo = 1;
-  		}
-  		printf("exp\n");
-  	  	al_draw_scaled_bitmap(objetos_mapa->explosao[1], 0, 0, 15, 16, j_aux, i_aux + MARGIN_TOP, SIZE_OBJS, SIZE_OBJS, 0);
-  	  }
-  	}
-  }	
-  objetos_mapa->ciclos_explosao++;   	
-}
-
 int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos *obj, long frames){
   int x, y;
   //Coordenadas do personagem dentro do mapa
