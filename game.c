@@ -62,7 +62,10 @@ void state_init(){
   disp = al_create_display(WIDTH, HEIGHT);
   inicia_allegro(disp, "display");
 
+  //font = al_create_builtin_font();
+  al_init_font_addon();
   font = al_create_builtin_font();
+  //font = al_load_ttf_font("resources/fonts/boulder.ttf", 10, 0);
   inicia_allegro(font, "font");
 
   inicia_allegro(al_init_primitives_addon(), "primitives");
@@ -80,10 +83,9 @@ void state_serve(){
   al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
-  	al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
+  	//al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
   	if(al_is_event_queue_empty(queue))
   	  draw_instructions(draw, frames);
-  	al_flip_display();
   	switch(event.type){
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
@@ -166,7 +168,8 @@ void state_play(){
       jogador->pontuacao = jogador->pontuacao + (relogio * 10);
   	  draw(redraw, frames);
   	  play_sound(sons_jogo->win);
-  	  al_rest(2);
+  	  state = FIMPART;
+  	  al_rest(1);
   	  break;
   	}
   	if(redraw && al_is_event_queue_empty(queue))
@@ -177,7 +180,7 @@ void state_play(){
 }
 
 void state_end(){
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
+  //al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
   al_flip_display();
   al_rest(1);
   state = FIMJOGO;
@@ -208,20 +211,23 @@ void draw(bool redraw, long frames){
 
 void draw_instructions(bool redraw, long frames){
   //al_clear_to_color(al_map_rgb(0, 0, 0));
-  al_draw_filled_rectangle(2 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 4 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
+  al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
   al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo é coletar o máximo de diamantes possível");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "e chegar na saída antes que o tempo acabe. Cuidado com as");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), eles podem cair em cima você!");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 160 + 2 * SIZE_OBJS, 0, "Você pode se mover pelo mapa utilizando as setas do teclado");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
   al_flip_display();
   //redraw = false;
 }
 
 void draw_hud(){
   al_clear_to_color(al_map_rgb(0, 0, 0));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "PONTOS: %05d", jogador->pontuacao);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 10, 0, "DIMAS: %d/%d", jogador->diamantes, MIN_DIAMANTES);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 10, 0, "%d", relogio);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 250, 10, 0, "%05d", jogador->pontuacao);
+  al_draw_bitmap(objetos_mapa->diamante[0], 0, 5, 0);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 20, 10, 0, "%d/%d", jogador->diamantes, MIN_DIAMANTES);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
 }
 
