@@ -76,10 +76,13 @@ void state_init(){
 
 void state_serve(){
   bool done = false;
-  //int draw = 1;
+  int draw = 1;
+  al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
   	al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
+  	if(al_is_event_queue_empty(queue))
+  	  draw_instructions(draw, frames);
   	al_flip_display();
   	switch(event.type){
   	  case ALLEGRO_EVENT_KEY_DOWN:
@@ -95,10 +98,15 @@ void state_serve(){
       state = JOGANDO;
       done = true;
   	}
+  	else if(key[ALLEGRO_KEY_ESCAPE]){
+  	  key[ALLEGRO_KEY_ESCAPE] = 0;
+  	  state = FIMPART;
+  	  done = true;
+  	}
   	if(done)
   	  break;
   }
-  state = JOGANDO;
+  //state = JOGANDO;
 }
 
 void state_play(){
@@ -154,8 +162,6 @@ void state_play(){
   	}
   	if(done)
       break;
-    if(redraw && al_is_event_queue_empty(queue))
-      draw(redraw, frames);
     if(testa_game_win(mapa, jogador)){
       jogador->pontuacao = jogador->pontuacao + (relogio * 10);
   	  draw(redraw, frames);
@@ -163,6 +169,8 @@ void state_play(){
   	  al_rest(2);
   	  break;
   	}
+  	if(redraw && al_is_event_queue_empty(queue))
+      draw(redraw, frames);
     frames++;
   }
   //state = FIMPART;
@@ -198,12 +206,23 @@ void draw(bool redraw, long frames){
   redraw = false;
 }
 
+void draw_instructions(bool redraw, long frames){
+  //al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_filled_rectangle(2 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 4 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_flip_display();
+  //redraw = false;
+}
+
 void draw_hud(){
   al_clear_to_color(al_map_rgb(0, 0, 0));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "PONTOS: %05d", jogador->pontuacao);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "DIMAS: %d/%d", jogador->diamantes, MIN_DIAMANTES);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", relogio);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "Vidas: %d", jogador->vidas);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "PONTOS: %05d", jogador->pontuacao);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 10, 0, "DIMAS: %d/%d", jogador->diamantes, MIN_DIAMANTES);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 10, 0, "%d", relogio);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){
