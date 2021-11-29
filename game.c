@@ -2,6 +2,7 @@
 // GRR 20190379 Dinf - UFPR
 #include <stdio.h>
 #include <stdlib.h>
+#include "allegro5/allegro_ttf.h"
 #include "game.h"
 #include "mapa.h"
 #include "player.h"
@@ -14,6 +15,7 @@ ALLEGRO_EVENT_QUEUE* queue;
 ALLEGRO_DISPLAY* disp;
 ALLEGRO_FONT* font;
 ALLEGRO_BITMAP* sheet;
+ALLEGRO_BITMAP* background;
 
 player *jogador;
 objetos *objetos_mapa;
@@ -63,9 +65,10 @@ void state_init(){
   inicia_allegro(disp, "display");
 
   //font = al_create_builtin_font();
-  al_init_font_addon();
+  inicia_allegro(al_init_font_addon(), "fonte");
+  inicia_allegro(al_init_ttf_addon(), "fonte");
   font = al_create_builtin_font();
-  //font = al_load_ttf_font("resources/fonts/boulder.ttf", 10, 0);
+  font = al_load_ttf_font("resources/fonts/pixeboy.ttf", 25, 0);
   inicia_allegro(font, "font");
 
   inicia_allegro(al_init_primitives_addon(), "primitives");
@@ -73,6 +76,37 @@ void state_init(){
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(disp));
   al_register_event_source(queue, al_get_timer_event_source(timer));
+
+  background = al_load_bitmap("resources/sprites/background.png");
+  //Menu de início
+  /*bool done = false;
+  al_flush_event_queue(queue);
+  while(1){
+    al_wait_for_event(queue, &event);
+    if(al_is_event_queue_empty(queue))
+  	  draw_inicial_menu();
+  	al_flip_display();
+  	switch(event.type){
+  	  case ALLEGRO_EVENT_KEY_DOWN:
+        key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+        break;
+      case ALLEGRO_EVENT_KEY_UP:
+        key[event.keyboard.keycode] &= KEY_RELEASED;
+        break;
+  	}
+  	if(key[ALLEGRO_KEY_ENTER]){
+  	  key[ALLEGRO_KEY_ENTER] = 0;
+      state = JOGANDO;
+      done = true;
+  	}
+  	else if(key[ALLEGRO_KEY_ESCAPE]){
+  	  key[ALLEGRO_KEY_ESCAPE] = 0;
+  	  state = FIMPART;
+  	  done = true;
+  	}
+  	if(done)
+  	  break;
+  }*/
 
   state = JOGANDO;
 }
@@ -229,10 +263,16 @@ void draw_instructions(bool redraw, long frames){
   //redraw = false;
 }
 
+void draw_inicial_menu(){
+  al_draw_bitmap(background, 0, 0, 0);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "OPA");
+  al_flip_display();
+}
+
 void draw_hud(){
   al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_textf(font, al_map_rgb(255, 255, 255), 250, 10, 0, "%05d", jogador->pontuacao);
-  al_draw_bitmap(objetos_mapa->diamante[0], 0, 5, 0);
+  al_draw_bitmap(objetos_mapa->diamante[0], 0, 8, 0);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 20, 10, 0, "%d/%d", jogador->diamantes, MIN_DIAMANTES);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);

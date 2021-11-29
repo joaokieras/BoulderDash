@@ -3,7 +3,7 @@
 CC = gcc
 EXEC = Boulder_Dash
 MAIN = main.c 
-ALLEGRO = $$(pkg-config allegro-5 allegro_font-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 --libs --cflags)
+ALLEGRO = $$(pkg-config --libs allegro-5 allegro_font-5 allegro_ttf-5 allegro_primitives-5 allegro_audio-5 allegro_acodec-5 allegro_image-5 --libs --cflags)
 INCLUDE = game.c mapa.c player.c sprites.c sons.c
 CFLAG = Wall
 OBJS = main.o game.o mapa.o player.o sprites.o sons.o
