@@ -212,12 +212,12 @@ void draw(bool redraw, long frames){
 void draw_instructions(bool redraw, long frames){
   //al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 425 + 2 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo é coletar o máximo de diamantes possível");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "e chegar na saída antes que o tempo acabe. Cuidado com as");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), eles podem cair em cima você!");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 160 + 2 * SIZE_OBJS, 0, "Você pode se mover pelo mapa utilizando as setas do teclado");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 4 * SIZE_OBJS, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo é coletar o máximo de diamantes possível");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "e chegar na saída antes que o tempo acabe. Cuidado com as");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), elas podem cair em cima você!");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 160 + 2 * SIZE_OBJS, 0, "Você pode se mover pelo mapa utilizando as setas do teclado");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
   al_flip_display();
   //redraw = false;
 }
@@ -229,6 +229,7 @@ void draw_hud(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 20, 10, 0, "%d/%d", jogador->diamantes, MIN_DIAMANTES);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2 - 10, 10, 0, "Help: H/F1");
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){
