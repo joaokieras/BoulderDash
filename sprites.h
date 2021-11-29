@@ -15,5 +15,6 @@
 
 void inicia_sprites_objetos(ALLEGRO_BITMAP* sheet, objetos* obj);
 void inicia_sprites_jogador(ALLEGRO_BITMAP* sheet, player* jogador);
-
+void destroi_sprites_objetos(objetos* obj);
+void destroi_sprites_player(player* jogador);
 #endif

@@ -242,7 +242,7 @@ void atualiza_player(player *jogador, int direcao, int andou){
 }
 
 void verifica_min_diamantes(int** mapa, player* jogador){
-  if(jogador->diamantes >= 10)
+  if(jogador->diamantes >= MIN_DIAMANTES)
   	mapa[16][38] = SAIDA;
 }
 
@@ -294,4 +294,8 @@ int testa_game_win(int** mapa, player* jogador){
   	}
   }
   return 0;
+}
+
+void destroi_player(player* jogador){
+  free(jogador);
 }

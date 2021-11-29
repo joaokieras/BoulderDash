@@ -23,6 +23,7 @@
 #define SPAWN_Y ((2 * SIZE_OBJS) + MARGIN_TOP)
 #define PATH_SPRITESHEET "resources/sprites/spritesheet.png"
 #define PATH_MAP_1 "resources/maps/mapa1.txt"
+#define MIN_DIAMANTES 12
 
 enum {INICIO, SERVINDO, JOGANDO, FIMPART, FIMJOGO} state;
 
@@ -35,5 +36,5 @@ void state_close();
 void inicia_allegro(bool teste, char *descricao);
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador);
 void draw(bool redraw, long frames);
-
+void draw_hud();
 #endif

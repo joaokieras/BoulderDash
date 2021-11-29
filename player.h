@@ -38,4 +38,5 @@ void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long fra
 void verifica_min_diamantes(int** mapa, player* jogador);
 void reseta_player(player* jogador);
 int testa_game_win(int** mapa, player* jogador);
+void destroi_player(player* jogador);
 #endif

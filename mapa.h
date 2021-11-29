@@ -57,4 +57,6 @@ void busca_pedras_explosao(objetos* obj, int x, int y);
 void busca_diamantes_explosao(objetos* obj, int x, int y);
 void busca_e_destroi_pedra(objetos* obj, int x, int y);
 void busca_e_destroi_diamante(objetos* obj, int x, int y);
+void destroi_mapa(int** mapa);
+void destroi_objetos(objetos* obj);
 #endif

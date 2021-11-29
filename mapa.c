@@ -316,3 +316,17 @@ void busca_e_destroi_diamante(objetos* obj, int x, int y){
   	}
   }
 }
+
+void destroi_mapa(int** mapa){
+  int i;
+
+  for(i = 0;i < 22;i++)
+  	free(mapa[i]);
+  free(mapa);
+}
+
+void destroi_objetos(objetos* obj){
+  free(obj->rock);
+  free(obj->diamond);
+  free(obj);
+}

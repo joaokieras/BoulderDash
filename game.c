@@ -21,6 +21,7 @@ audio *sons_jogo;
 
 int **mapa, relogio = 150;
 long frames = 0;
+unsigned char key[ALLEGRO_KEY_MAX];
 
 void inicia_allegro(bool teste, char *descricao){
   if(teste) 
@@ -70,10 +71,24 @@ void state_init(){
   al_register_event_source(queue, al_get_display_event_source(disp));
   al_register_event_source(queue, al_get_timer_event_source(timer));
 
-  state = SERVINDO;
+  state = JOGANDO;
 }
 
 void state_serve(){
+  /*bool done = false;
+  //int draw = 1;
+  while(1){
+  	al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "PAUSE");
+  	al_flip_display();
+  	if(key[ALLEGRO_KEY_H] || key[ALLEGRO_KEY_F1]){
+  	  key[ALLEGRO_KEY_H] = 0;
+      key[ALLEGRO_KEY_F1] = 0;
+      //state = JOGANDO;
+      done = true;
+  	}
+  	if(done)
+  	  break;
+  }*/
   state = JOGANDO;
 }
 
@@ -82,7 +97,6 @@ void state_play(){
   bool redraw = true;
   long frames = 0;
   int morreu = 0, ganhou = 0;
-  unsigned char key[ALLEGRO_KEY_MAX];
 
   memset(key, 0, sizeof(key));
   al_start_timer(timer);
@@ -115,6 +129,17 @@ void state_play(){
         done = true;
         break;
   	}
+  	if(key[ALLEGRO_KEY_H] || key[ALLEGRO_KEY_F1]){
+  	  key[ALLEGRO_KEY_H] = 0;
+      key[ALLEGRO_KEY_F1] = 0;
+      state = SERVINDO;
+      done = true;
+  	}
+  	else if(key[ALLEGRO_KEY_ESCAPE]){
+  	  key[ALLEGRO_KEY_ESCAPE] = 0;
+  	  state = FIMPART;
+  	  done  = true;
+  	}
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0)
   	  break;
   	if(done)
@@ -134,12 +159,17 @@ void state_play(){
 void state_end(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
   al_flip_display();
-  usleep(1000000);
+  al_rest(1);
   state = FIMJOGO;
 }
 
 void state_close(){
+  destroi_sprites_objetos(objetos_mapa);
+  destroi_sprites_player(jogador);
   destroy_sounds(sons_jogo);
+  destroi_mapa(mapa);
+  destroi_objetos(objetos_mapa);
+  destroi_player(jogador);
   al_destroy_bitmap(sheet);
   al_destroy_font(font);
   al_destroy_display(disp);
@@ -149,17 +179,19 @@ void state_close(){
 }
 
 void draw(bool redraw, long frames){
-  al_clear_to_color(al_map_rgb(0, 0, 0));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "X: %d Y: %d", jogador->pos_x/SIZE_OBJS, (jogador->pos_y - MARGIN_TOP)/SIZE_OBJS);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 500, 0, 0, "PONTOS: %d", jogador->pontuacao);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 600, 0, 0, "DIMAS: %d", jogador->diamantes);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 150, 0, 0, "Frames: %ld", frames);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", relogio);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "Vidas: %d", jogador->vidas);
+  draw_hud();
   draw_map(mapa, sons_jogo, objetos_mapa, frames);
   draw_player(jogador, sons_jogo, mapa, objetos_mapa, frames);
   al_flip_display();
   redraw = false;
+}
+
+void draw_hud(){
+  al_clear_to_color(al_map_rgb(0, 0, 0));
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 0, 0, "PONTOS: %05d", jogador->pontuacao);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "DIMAS: %d/%d", jogador->diamantes, MIN_DIAMANTES);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 700, 0, 0, "%d", relogio);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "Vidas: %d", jogador->vidas);
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){

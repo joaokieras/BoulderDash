@@ -43,3 +43,29 @@ void inicia_sprites_jogador(ALLEGRO_BITMAP* sheet, player* jogador){
   for(int i = 1;i <= 6;i++)
     jogador->player_direita[i] = al_create_sub_bitmap(sheet, (16 * i), 32, 15, 16);
 }
+
+void destroi_sprites_objetos(objetos* obj){
+  al_destroy_bitmap(obj->metal);
+  al_destroy_bitmap(obj->saida);
+  al_destroy_bitmap(obj->muro);
+  al_destroy_bitmap(obj->terra);
+  al_destroy_bitmap(obj->pedra);
+  al_destroy_bitmap(obj->vazio);
+
+  for(int i = 0;i < 4;i++)
+    al_destroy_bitmap(obj->explosao[i]);
+
+  for(int i = 0;i < 8;i++)
+    al_destroy_bitmap(obj->diamante[i]);
+}
+
+void destroi_sprites_player(player* jogador){
+  for(int i = 0;i < 7;i++)
+    al_destroy_bitmap(jogador->player_parado[i]);
+
+  for(int i = 0;i < 7;i++)
+    al_destroy_bitmap(jogador->player_esquerda[i]);
+
+  for(int i = 0;i < 7;i++)
+    al_destroy_bitmap(jogador->player_direita[i]);
+}
