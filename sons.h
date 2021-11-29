@@ -11,6 +11,7 @@ struct audio{
   ALLEGRO_SAMPLE* terra;
   ALLEGRO_SAMPLE* diamante;
   ALLEGRO_SAMPLE* fall;
+  ALLEGRO_SAMPLE* win;
   ALLEGRO_AUDIO_STREAM* bg_music;
 };
 typedef struct audio audio;

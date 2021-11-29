@@ -115,14 +115,17 @@ void state_play(){
         done = true;
         break;
   	}
-  	if(testa_game_win(mapa, jogador))
-  	  break;
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0)
   	  break;
   	if(done)
       break;
     if(redraw && al_is_event_queue_empty(queue))
       draw(redraw, frames);
+    if(testa_game_win(mapa, jogador)){
+  	  play_sound(sons_jogo->win);
+  	  al_rest(0.5);
+  	  break;
+  	}
     frames++;
   }
   state = FIMPART;
