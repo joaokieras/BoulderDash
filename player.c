@@ -253,3 +253,45 @@ void reseta_player(player* jogador){
   jogador->pos_x = SPAWN_X;
   jogador->pos_y = SPAWN_Y;
 }
+
+int testa_game_win(int** mapa, player* jogador){
+  int x, y;
+
+  x = jogador->pos_x / SIZE_OBJS;
+  y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
+  if(mapa[16][38] == PLAYER)
+  	return 1;
+  else if(jogador->flag_left){
+  	if(mapa[y][x - 1] == SAIDA){
+  	  mapa[y][x - 1] = PLAYER;
+  	  mapa[y][x] = VAZIO;
+  	  atualiza_player(jogador, 0, 1);
+  	  return 1;
+  	}
+  }
+  else if(jogador->flag_right){
+  	if(mapa[y][x + 1] == SAIDA){
+  	  mapa[y][x + 1] = PLAYER;
+  	  mapa[y][x] = VAZIO;
+  	  atualiza_player(jogador, 1, 1);
+  	  return 1;
+  	}
+  }
+  else if(jogador->flag_up){
+  	if(mapa[y - 1][x] == SAIDA){
+  	  mapa[y - 1][x] = PLAYER;
+  	  mapa[y][x] = VAZIO;
+  	  atualiza_player(jogador, 2, 1);
+  	  return 1;
+  	}
+  }
+  else if(jogador->flag_down){
+  	if(mapa[y + 1][x] == SAIDA){
+  	  mapa[y + 1][x] = PLAYER;
+  	  mapa[y][x] = VAZIO;
+  	  atualiza_player(jogador, 3, 1);
+  	  return 1;
+  	}
+  }
+  return 0;
+}

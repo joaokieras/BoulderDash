@@ -81,7 +81,7 @@ void state_play(){
   bool done = false;
   bool redraw = true;
   long frames = 0;
-  int morreu = 0;
+  int morreu = 0, ganhou = 0;
   unsigned char key[ALLEGRO_KEY_MAX];
 
   memset(key, 0, sizeof(key));
@@ -115,7 +115,9 @@ void state_play(){
         done = true;
         break;
   	}
-  	if(jogador->vidas < 0 && frames % TEMPO_RESET == 0)
+  	if(testa_game_win(mapa, jogador))
+  	  break;
+  	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0)
   	  break;
   	if(done)
       break;

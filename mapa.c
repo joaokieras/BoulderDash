@@ -194,7 +194,7 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
   	    mapa[pos_x][pos_y + 1] = DIAMANTE; 
   	    mapa[pos_x][pos_y] = VAZIO;
   	  }
-  	  if(mapa[pos_x][pos_y - 1] == VAZIO && mapa[pos_x + 1][pos_y - 1] == VAZIO){
+  	  else if(mapa[pos_x][pos_y - 1] == VAZIO && mapa[pos_x + 1][pos_y - 1] == VAZIO){
   	    objetos_mapa->diamond[i].y--;
   	    mapa[pos_x][pos_y - 1] = DIAMANTE;	 
   	    mapa[pos_x][pos_y] = VAZIO;
