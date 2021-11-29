@@ -75,20 +75,29 @@ void state_init(){
 }
 
 void state_serve(){
-  /*bool done = false;
+  bool done = false;
   //int draw = 1;
   while(1){
-  	al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 20, 0, "PAUSE");
+  	al_wait_for_event(queue, &event);
+  	al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
   	al_flip_display();
+  	switch(event.type){
+  	  case ALLEGRO_EVENT_KEY_DOWN:
+        key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+        break;
+      case ALLEGRO_EVENT_KEY_UP:
+        key[event.keyboard.keycode] &= KEY_RELEASED;
+        break;
+  	}
   	if(key[ALLEGRO_KEY_H] || key[ALLEGRO_KEY_F1]){
   	  key[ALLEGRO_KEY_H] = 0;
       key[ALLEGRO_KEY_F1] = 0;
-      //state = JOGANDO;
+      state = JOGANDO;
       done = true;
   	}
   	if(done)
   	  break;
-  }*/
+  }
   state = JOGANDO;
 }
 
@@ -135,25 +144,28 @@ void state_play(){
       state = SERVINDO;
       done = true;
   	}
-  	else if(key[ALLEGRO_KEY_ESCAPE]){
+  	if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
   	  state = FIMPART;
   	  done  = true;
   	}
-  	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0)
+  	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0){
   	  break;
+  	}
   	if(done)
       break;
     if(redraw && al_is_event_queue_empty(queue))
       draw(redraw, frames);
     if(testa_game_win(mapa, jogador)){
+      jogador->pontuacao = jogador->pontuacao + (relogio * 10);
+  	  draw(redraw, frames);
   	  play_sound(sons_jogo->win);
-  	  al_rest(0.5);
+  	  al_rest(2);
   	  break;
   	}
     frames++;
   }
-  state = FIMPART;
+  //state = FIMPART;
 }
 
 void state_end(){
