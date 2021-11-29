@@ -128,7 +128,8 @@ void state_play(){
   	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
-  	  	morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
+  	  	if(!jogador->invencivel)
+  	  	  morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
   	  	if(morreu)
   	  	  reseta_player(jogador);
   	  	if(frames % 60 == 0 && jogador->vivo)
@@ -218,6 +219,12 @@ void draw_instructions(bool redraw, long frames){
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), elas podem cair em cima você!");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 160 + 2 * SIZE_OBJS, 0, "Você pode se mover pelo mapa utilizando as setas do teclado");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 220 + 2 * SIZE_OBJS, 0, "Dica! Ao apertar a tecla 'i' seu personagem fica invencível, ");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 240 + 2 * SIZE_OBJS, 0, "mas cuidado! Você ainda pode ficar preso entre as pedras.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 280 + 2 * SIZE_OBJS, 0, "Jogo desenvolvido por João Pedro Kieras Oliveira para a");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 300 + 2 * SIZE_OBJS, 0, "disciplina de Programação 2.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 320 + 2 * SIZE_OBJS, 0, "Departamento de Informática - UFPR");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 340 + 2 * SIZE_OBJS, 0, "Novembro de 2021.");
   al_flip_display();
   //redraw = false;
 }
@@ -230,6 +237,10 @@ void draw_hud(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2 - 10, 10, 0, "Help: H/F1");
+  if(jogador->invencivel)
+    al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: ON");
+  else
+  	al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: OFF");
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){
@@ -256,6 +267,9 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
       jogador->flag_right = 1;
       jogador->tired++;
     }
+  }
+  else if(key[ALLEGRO_KEY_I]){
+  	jogador->invencivel = 1;
   }
   
   if(key[ALLEGRO_KEY_ESCAPE])

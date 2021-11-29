@@ -28,6 +28,7 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->flag_right = 0;	
   jogador->diamantes = 0;
   jogador->pontuacao = 0;
+  jogador->invencivel = 0;
   jogador->vivo = 1;
   jogador->vidas = 3;
   inicia_sprites_jogador(sheet, jogador);

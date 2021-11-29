@@ -26,6 +26,7 @@ struct player{
   int vivo, vidas;
   int pos_x, pos_y;
   int vel_x, vel_y;
+  int invencivel;
   int diamantes;
   int pontuacao;
 };
