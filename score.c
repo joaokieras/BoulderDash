@@ -39,7 +39,6 @@ void salva_pontuacao(int pontos_jogador, pontos* pontuacao){
     pontuacao->score[i + 1] = pontuacao->score[i];
   }
   int pos = i;
-  // insere score atual na sua posição devida
   pontuacao->score[pos] = pontos_jogador;
 
   fprintf(arq, "%d", pontuacao->score[0]);

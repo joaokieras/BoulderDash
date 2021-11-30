@@ -42,11 +42,13 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
 void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long frames){
   int andou = 1;
   if(!jogador->vivo){
+  	//Revive jogador após tempo
   	if(frames % TEMPO_RESET == 0)
   	  jogador->vivo = 1;
   	else
   	  return;
   }
+  //Verifica terreno de acordo com a direção(esq, dir, etc), atualiza posição do player e o desenha na tela
   if(jogador->flag_left){
   	andou = testa_terreno(jogador, som, mapa, 0, obj, frames);
   	atualiza_player(jogador, 0, andou);
@@ -81,7 +83,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   //Coordenadas do personagem dentro do mapa
   x = jogador->pos_x / SIZE_OBJS;
   y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;	
-  //0 - Esquerda - 1 - Direita - 2 - Cima - 3 - Baixo
+  //0 - Esquerda / 1 - Direita / 2 - Cima / 3 - Baixo
   //Personagem só pode se mover a cada 5 frames
   if(jogador->tired % 5 == 0){
     switch(direcao){
@@ -211,12 +213,14 @@ void atualiza_player(player *jogador, int direcao, int andou){
       atualiza_player_baixo(jogador, andou);
       break;	  
   }
+  //Reseta o frame da animação se necessário
   if(jogador->ciclos_esq == 7)
     jogador->ciclos_esq = 0;
   if(jogador->ciclos_dir == 7)
     jogador->ciclos_dir = 0;
 }
 
+//Basicamente reseta o flag de movimento, atualiza ciclo de animação e muda a coord. de posição do jogador
 void atualiza_player_esq(player* jogador, int andou){
   jogador->flag_left = 0;
   jogador->ciclos_esq++;
@@ -270,24 +274,25 @@ int testa_game_win(int** mapa, player* jogador){
   int x, y;
   x = jogador->pos_x / SIZE_OBJS;
   y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
+  //Se o jogador ir para a saída com o mínimo de diamantes ele ganha
   if(mapa[16][38] == PLAYER)
   	return 1;
   else if(jogador->flag_right){
-  	if(verifica_vazio_horizontal(jogador, mapa, x, y, 1, 1))
+  	if(verifica_saida_horizontal(jogador, mapa, x, y, 1, 1))
   	  return 1;
   }
   else if(jogador->flag_up){
-  	if(verifica_vazio_vertical(jogador, mapa, x, y, -1, 2))
+  	if(verifica_saida_vertical(jogador, mapa, x, y, -1, 2))
   	  return 1;
   }
   else if(jogador->flag_down){
-  	if(verifica_vazio_vertical(jogador, mapa, x, y, 1, 3))
+  	if(verifica_saida_vertical(jogador, mapa, x, y, 1, 3))
   	  return 1;
   }
   return 0;
 }
 
-int verifica_vazio_vertical(player* jogador, int** mapa, int x, int y, int lado, int direcao){
+int verifica_saida_vertical(player* jogador, int** mapa, int x, int y, int lado, int direcao){
   if(mapa[y + lado][x] == SAIDA){
   	mapa[y + lado][x] = PLAYER;
   	mapa[y][x] = VAZIO;
@@ -297,7 +302,7 @@ int verifica_vazio_vertical(player* jogador, int** mapa, int x, int y, int lado,
   return 0;
 }
 
-int verifica_vazio_horizontal(player* jogador, int** mapa, int x, int y, int lado, int direcao){
+int verifica_saida_horizontal(player* jogador, int** mapa, int x, int y, int lado, int direcao){
   if(mapa[y][x + lado] == SAIDA){
   	mapa[y][x + lado] = PLAYER;
   	mapa[y][x] = VAZIO;

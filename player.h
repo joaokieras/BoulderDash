@@ -49,8 +49,8 @@ int verifica_diamantes_horizontal(player* jogador, audio* som, int** mapa, objet
 int verifica_diamantes_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado);
 int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, int x, int y, int lado);
 int verifica_terra_vertical(player* jogador, audio* som, int** mapa, int x, int y, int lado);
-int verifica_vazio_horizontal(player* jogador, int** mapa, int x, int y, int lado, int direcao);
-int verifica_vazio_vertical(player* jogador, int** mapa, int x, int y, int lado, int direcao);
+int verifica_saida_horizontal(player* jogador, int** mapa, int x, int y, int lado, int direcao);
+int verifica_saida_vertical(player* jogador, int** mapa, int x, int y, int lado, int direcao);
 int empurra_pedra_esq(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y);
 int empurra_pedra_dir(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y);
 #endif
