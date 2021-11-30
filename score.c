@@ -1,5 +1,5 @@
 // Projeto desenvolvido por João Pedro Kieras Oliveira
-// GRR 20190379 Dinf - UFPR
+// GRR 20190379 Dinf - UFPR 
 #include "score.h"
 #include <stdio.h>
 
@@ -9,14 +9,11 @@ pontos* carrega_pontuacao(){
 
   pontuacao = malloc(sizeof(pontos));
   pontuacao->tam = SIZE_ARQ_PONTOS;
-  //printf("entrou\n");
-  //pontuacao->tam = 0;
   arq = fopen(PATH_SCORE, "r");
   if(!arq){
   	fprintf(stderr, "Não foi possivel inicializar o arquivo score\n");
     exit(1);
   }
-  //printf("ola\n");
   for(int i = 0;i < SIZE_ARQ_PONTOS && !feof(arq);i++)
   	fscanf(arq, "%d", &pontuacao->score[i]);
 
@@ -32,6 +29,7 @@ void salva_pontuacao(int pontos_jogador, pontos* pontuacao){
   	fprintf(stderr, "Não foi possivel inicializar o arquivo score\n");
     exit(1);
   }
+  //Insere a pontuação do jogador no vetor de pontuação
   int i = pontuacao->tam - 1;
   while(pontos_jogador > pontuacao->score[i - 1] && i > 0)
   {

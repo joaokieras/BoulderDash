@@ -1,5 +1,5 @@
 // Projeto desenvolvido por João Pedro Kieras Oliveira
-// GRR 20190379 Dinf - UFPR
+// GRR 20190379 Dinf - UFPR 
 #include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
@@ -16,6 +16,7 @@ int** inicia_mapa(char* nome_mapa, objetos* obj){
   	exit(1);
   }
   fscanf(arq, "%d %d", &lin, &col);
+
   mapa = malloc(lin * sizeof(int*));
   for(i = 0;i < lin;i++)
   	mapa[i] = malloc(col * sizeof(int));
@@ -33,9 +34,7 @@ int** inicia_mapa(char* nome_mapa, objetos* obj){
   obj->qntd_diamonds = cont_diamantes;
   obj->rock = malloc(cont_pedras * sizeof(rock));
   obj->diamond = malloc(cont_diamantes * sizeof(rock));
-
   inicia_pedras_e_diamantes(mapa, obj);
-
   fclose(arq);
   return mapa;
 }
@@ -70,7 +69,6 @@ objetos* inicia_objetos(ALLEGRO_BITMAP* sheet){
   }
   inicia_sprites_objetos(sheet, obj);
   obj->ciclos_diamante = 0;
-  obj->ciclos_explosao = 1;
 }
 
 void draw_map(int** mapa, audio* som, objetos* objetos_mapa, long frames){
@@ -160,16 +158,13 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
   for(int i = 0;i < objetos_mapa->qntd_diamonds;i++){
     pos_x = objetos_mapa->diamond[i].x;
   	pos_y = objetos_mapa->diamond[i].y;
-
   	verifica_rolamento_diamantes(mapa, objetos_mapa, pos_x, pos_y, i);
-
   	if(objetos_mapa->diamond[i].caindo == 1){
   	  if(mapa[pos_x + 1][pos_y] != VAZIO && mapa[pos_x + 1][pos_y] != PLAYER && mapa[pos_x + 1][pos_y] != EXPLOSAO){
   	  	play_sound(som->fall);
   	    objetos_mapa->diamond[i].caindo = 0;
   	  }
   	}
-
   	if(mapa[pos_x + 1][pos_y] == VAZIO && (pos_x + 1 < 21)){
   	  objetos_mapa->diamond[i].caindo = 1;
   	  objetos_mapa->diamond[i].x++;
@@ -180,6 +175,7 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
 }
 
 void verifica_rolamento_pedras(int** mapa, objetos* objetos_mapa, int pos_x, int pos_y, int i){
+  //Verifica se está no topo da pilha
   if((mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == DIAMANTE) && 
   	  (mapa[pos_x - 1][pos_y] != PEDRA || mapa[pos_x - 1][pos_y] != DIAMANTE)){
   	if(mapa[pos_x][pos_y + 1] == VAZIO && mapa[pos_x + 1][pos_y + 1] == VAZIO){
@@ -214,10 +210,9 @@ void verifica_rolamento_diamantes(int** mapa, objetos* objetos_mapa, int pos_x, 
 int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, int tempo){
   if(frames % 10 != 0)
   	return 0;
-  //if(tempo == 0)
-  	//return 1;
-  int pos_x, pos_y;
 
+  int pos_x, pos_y;
+  //Percorre vetor de pedras verificando se acerta o player
   for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
   	pos_x = objetos_mapa->rock[i].x;
   	pos_y = objetos_mapa->rock[i].y;
@@ -225,15 +220,8 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, 
   	  if(mapa[pos_x + 1][pos_y] == PLAYER){
   	  play_sound(som->fall);
   	  busca_pedras_explosao(objetos_mapa, pos_x + 1, pos_y);
-  	  mapa[pos_x + 1][pos_y] = EXPLOSAO;
-  	  mapa[pos_x][pos_y] = EXPLOSAO;
-  	  mapa[pos_x][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
+  	  explode_em_volta(mapa, pos_x, pos_y);
+  	  //"Deleta" pedra que explodiu o player
   	  objetos_mapa->rock[i].y = 0;
   	  objetos_mapa->rock[i].x = 0;
   	  objetos_mapa->rock[i].caindo = 0;
@@ -241,6 +229,7 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, 
   	  }
   	}
   }
+  //O mesmo com vetor de diamantes
   for(int i = 0;i < objetos_mapa->qntd_diamonds;i++){
   	pos_x = objetos_mapa->diamond[i].x;
   	pos_y = objetos_mapa->diamond[i].y;
@@ -248,15 +237,7 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, 
   	  if(mapa[pos_x + 1][pos_y] == PLAYER){
   	  play_sound(som->fall);
   	  busca_diamantes_explosao(objetos_mapa, pos_x + 1, pos_y);
-  	  mapa[pos_x + 1][pos_y] = EXPLOSAO;
-  	  mapa[pos_x][pos_y] = EXPLOSAO;
-  	  mapa[pos_x][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
-  	  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y] = EXPLOSAO;
-  	  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
+  	  explode_em_volta(mapa, pos_x, pos_y);
   	  objetos_mapa->diamond[i].y = 0;
   	  objetos_mapa->diamond[i].x = 0;
   	  objetos_mapa->diamond[i].caindo = 0;
@@ -265,6 +246,18 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, 
   	}
   }
   return 0;
+}
+
+void explode_em_volta(int** mapa, int pos_x, int pos_y){
+  mapa[pos_x + 1][pos_y] = EXPLOSAO;
+  mapa[pos_x][pos_y] = EXPLOSAO;
+  mapa[pos_x][pos_y + 1] = EXPLOSAO;
+  mapa[pos_x][pos_y - 1] = EXPLOSAO;
+  mapa[pos_x + 1][pos_y + 1] = EXPLOSAO;
+  mapa[pos_x + 1][pos_y - 1] = EXPLOSAO;
+  mapa[pos_x + 2][pos_y - 1] = EXPLOSAO;
+  mapa[pos_x + 2][pos_y] = EXPLOSAO;
+  mapa[pos_x + 2][pos_y + 1] = EXPLOSAO;
 }
 
 //Destroi qualquer pedra em volta da explosão

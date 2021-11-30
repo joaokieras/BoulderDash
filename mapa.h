@@ -1,5 +1,5 @@
 // Projeto desenvolvido por João Pedro Kieras Oliveira
-// GRR 20190379 Dinf - UFPR
+// GRR 20190379 Dinf - UFPR 
 #ifndef __MAPA__
 #define __MAPA__
 
@@ -42,7 +42,7 @@ struct objetos{
   ALLEGRO_BITMAP* diamante[8];
   ALLEGRO_BITMAP* explosao[4];
   int qntd_rocks, qntd_diamonds;
-  int ciclos_diamante, ciclos_explosao;
+  int ciclos_diamante;
 };
 typedef struct objetos objetos;
 
@@ -61,4 +61,5 @@ void destroi_mapa(int** mapa);
 void destroi_objetos(objetos* obj);
 void verifica_rolamento_pedras(int** mapa, objetos* objetos_mapa, int pos_x, int pos_y, int i);
 void verifica_rolamento_diamantes(int** mapa, objetos* objetos_mapa, int pos_x, int pos_y, int i);
+void explode_em_volta(int** mapa, int pos_x, int pos_y);
 #endif
