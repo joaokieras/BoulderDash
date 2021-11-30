@@ -1,3 +1,5 @@
+// Projeto desenvolvido por João Pedro Kieras Oliveira
+// GRR 20190379 Dinf - UFPR
 #include "score.h"
 #include <stdio.h>
 

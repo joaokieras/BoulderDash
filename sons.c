@@ -1,3 +1,5 @@
+// Projeto desenvolvido por João Pedro Kieras Oliveira
+// GRR 20190379 Dinf - UFPR
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include "game.h"
