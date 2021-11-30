@@ -141,6 +141,7 @@ void state_play(){
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
   	  	//Ativa o cheat code
   	  	if(!strcmp(jogador->code, cheat_code) && glitch){
+  	  	  play_sound(sons_jogo->cheat);
   	  	  jogador->pontuacao += 500; 
   	      jogador->invencivel = 1;
   	      glitch = 0;
