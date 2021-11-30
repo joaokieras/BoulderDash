@@ -8,6 +8,7 @@
 #include "player.h"
 #include "sprites.h"
 #include "sons.h"
+#include "score.h"
 
 ALLEGRO_TIMER* timer;
 ALLEGRO_EVENT event;
@@ -15,11 +16,12 @@ ALLEGRO_EVENT_QUEUE* queue;
 ALLEGRO_DISPLAY* disp;
 ALLEGRO_FONT* font;
 ALLEGRO_BITMAP* sheet;
-//ALLEGRO_BITMAP* background;
 
 player *jogador;
 objetos *objetos_mapa;
 audio *sons_jogo;
+//pontos *pontos_totais;
+int pontos_totais[5];
 
 int **mapa, relogio = 150;
 long frames = 0;
@@ -57,6 +59,7 @@ void state_init(){
   sons_jogo = inicializa_sons();
   al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
   //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
+  carrega_pontuacao(pontos_totais, 5);
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -77,8 +80,6 @@ void state_init(){
   al_register_event_source(queue, al_get_keyboard_event_source());
   al_register_event_source(queue, al_get_display_event_source(disp));
   al_register_event_source(queue, al_get_timer_event_source(timer));
-
-  //background = al_load_bitmap("resources/sprites/background.png");
 
   state = JOGANDO;
 }
@@ -176,20 +177,17 @@ void state_play(){
   	  draw(redraw, frames);
   	  play_sound(sons_jogo->win);
   	  state = FIMPART;
-  	  //al_rest(1);
   	  break;
   	}
   	if(redraw && al_is_event_queue_empty(queue))
       draw(redraw, frames);
     frames++;
   }
-  //state = FIMPART;
 }
 
 void state_end(){
-  //al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
-  //al_flip_display();
   bool done = false;
+  salva_pontuacao(jogador->pontuacao, pontos_totais, 5);
   al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
@@ -203,11 +201,6 @@ void state_end(){
         key[event.keyboard.keycode] &= KEY_RELEASED;
         break;
   	}
-  	/*if(key[ALLEGRO_KEY_ENTER]){
-  	  //key[ALLEGRO_KEY_ENTER] = 0;
-      state = INICIO;
-      done = true;
-  	}*/
   	if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
   	  state = FIMJOGO;
@@ -216,13 +209,6 @@ void state_end(){
   	if(done)
   	  break;
   }
-
-  /*if(ganhou)
-  	draw_screen_win();
-  else
-  	draw_screen_lose();*/
-  //al_rest(1);
-  //state = FIMJOGO;
 }
 
 void state_close(){
@@ -249,7 +235,6 @@ void draw(bool redraw, long frames){
 }
 
 void draw_instructions(){
-  //al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U C O E S");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo eh coletar o maximo de diamantes possivel");
@@ -263,22 +248,18 @@ void draw_instructions(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 300 + 2 * SIZE_OBJS, 0, "disciplina de Programacao 2.");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 340 + 2 * SIZE_OBJS, 0, "Departamento de Informatica - UFPR - Novembro de 2021.");
   al_flip_display();
-  //redraw = false;
 }
 
 void draw_end_game(){
   al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "F I M D E J O G O");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "PONTUACAO: %d", jogador->pontuacao);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 140 + 2 * SIZE_OBJS, 0, "Placar de pontos");
+  for(int i = 0;i < 5;i++)
+  	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 180 + (i*30) + 2 * SIZE_OBJS, 0, "%d: %d pts", i + 1, pontos_totais[i]);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 5 * SIZE_OBJS, 500 + 2 * SIZE_OBJS, 0, "Pressione ESC para sair...");
   al_flip_display();
 }
-
-/*void draw_inicial_menu(){
-  al_draw_bitmap(background, 0, 0, 0);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "OPA");
-  al_flip_display();
-}*/
 
 void draw_hud(){
   al_clear_to_color(al_map_rgb(0, 0, 0));

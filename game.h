@@ -16,13 +16,14 @@
 #define WIDTH (40 * SIZE_OBJS)
 #define HEIGHT ((22 * SIZE_OBJS) + MARGIN_TOP)
 #define FRAMERATE 60.0
-#define TEMPO_RESET 165
+#define TEMPO_RESET 105
 #define KEY_SEEN     1
 #define KEY_RELEASED 2
 #define SPAWN_X (3 * SIZE_OBJS)
 #define SPAWN_Y ((2 * SIZE_OBJS) + MARGIN_TOP)
 #define PATH_SPRITESHEET "resources/sprites/spritesheet.png"
 #define PATH_MAP_1 "resources/maps/mapa1.txt"
+#define PATH_SCORE "resources/scores/score.txt"
 #define MIN_DIAMANTES 12
 
 enum {INICIO, SERVINDO, JOGANDO, FIMPART, FIMJOGO} state;

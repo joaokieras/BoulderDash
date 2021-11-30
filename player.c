@@ -42,11 +42,8 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
 void draw_player(player *jogador, audio* som, int** mapa, objetos *obj, long frames){
   int andou = 1;
   if(!jogador->vivo){
-  	if(frames % TEMPO_RESET == 0){
+  	if(frames % TEMPO_RESET == 0)
   	  jogador->vivo = 1;
-  	  //mapa = recarrega_mapa(PATH_MAP_1, mapa);
-  	  //mapa = inicia_mapa(PATH_MAP_1, obj);
-  	}
   	else
   	  return;
   }
