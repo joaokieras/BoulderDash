@@ -149,9 +149,12 @@ void state_play(){
   	  	//Se o jogador não está invencível, verifica se algo cai em cima dele
   	  	if(!jogador->invencivel)
   	  	  morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
+  	  	//Se tempo acabou é considerado desistência
+  	  	if(relogio == 0)
+  	  	  jogador->vidas = 0;
   	  	if(morreu)
   	  	  reseta_player(jogador);
-  	  	if(frames % 60 == 0 && jogador->vivo)
+  	  	if(frames % 60 == 0 && jogador->vivo && relogio > 0)
   	  	  relogio--;
   	  	//Se jogador morreu, espera a animação de explosão e reinicia o mapa e o relógio
   	  	if(!jogador->vivo && frames % TEMPO_RESET == 0){

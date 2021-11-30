@@ -220,8 +220,8 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
 int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, int tempo){
   if(frames % 10 != 0)
   	return 0;
-  if(tempo == 0)
-  	return 1;
+  //if(tempo == 0)
+  	//return 1;
   int pos_x, pos_y;
 
   for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
