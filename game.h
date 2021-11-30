@@ -25,6 +25,7 @@
 #define PATH_MAP_1 "resources/maps/mapa1.txt"
 #define PATH_SCORE "resources/scores/score.txt"
 #define MIN_DIAMANTES 12
+#define SIZE_ARQ_PONTOS 5
 
 enum {INICIO, SERVINDO, JOGANDO, FIMPART, FIMJOGO} state;
 

@@ -59,7 +59,7 @@ void state_init(){
   sons_jogo = inicializa_sons();
   al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
   //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
-  pontos_totais = carrega_pontuacao(5);
+  pontos_totais = carrega_pontuacao();
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -119,7 +119,7 @@ void state_play(){
   bool done = false;
   bool redraw = true;
   long frames = 0;
-  int morreu = 0, ganhou = 0;
+  int morreu = 0, ganhou = 0, glitch = 1;
 
   memset(key, 0, sizeof(key));
   al_start_timer(timer);
@@ -132,8 +132,11 @@ void state_play(){
   	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
-  	  	if(!strcmp(jogador->code, cheat_code))
+  	  	if(!strcmp(jogador->code, cheat_code) && glitch){
+  	  	  jogador->pontuacao += 500; 
   	      jogador->invencivel = 1;
+  	      glitch = 0;
+  	  	}
   	  	if(!jogador->invencivel)
   	  	  morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
   	  	if(morreu)

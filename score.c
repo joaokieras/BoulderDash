@@ -1,11 +1,12 @@
 #include "score.h"
 #include <stdio.h>
 
-pontos* carrega_pontuacao(int tam){
+pontos* carrega_pontuacao(){
   FILE* arq;
   pontos* pontuacao;
+
   pontuacao = malloc(sizeof(pontos));
-  pontuacao->tam = tam;
+  pontuacao->tam = SIZE_ARQ_PONTOS;
   //printf("entrou\n");
   //pontuacao->tam = 0;
   arq = fopen(PATH_SCORE, "r");
@@ -14,7 +15,7 @@ pontos* carrega_pontuacao(int tam){
     exit(1);
   }
   //printf("ola\n");
-  for(int i = 0;i < tam && !feof(arq);i++)
+  for(int i = 0;i < SIZE_ARQ_PONTOS && !feof(arq);i++)
   	fscanf(arq, "%d", &pontuacao->score[i]);
 
   fclose(arq);

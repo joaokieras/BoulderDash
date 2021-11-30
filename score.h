@@ -4,12 +4,12 @@
 #define __SCORE__
 
 struct pontos{
-  int score[5];
+  int score[SIZE_ARQ_PONTOS];
   int tam;
 };
 typedef struct pontos pontos;
 
-pontos* carrega_pontuacao(int tam);
+pontos* carrega_pontuacao();
 void salva_pontuacao(int pontos_jogador, pontos* pontuacao);
 void destroi_pontuacao(pontos* pontos);
 
