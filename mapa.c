@@ -148,7 +148,7 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, l
   for(int i = 0;i < objetos_mapa->qntd_rocks;i++){
   	pos_x = objetos_mapa->rock[i].x;
   	pos_y = objetos_mapa->rock[i].y;
-
+  	//Verifica rolamento para os lados
   	if((mapa[pos_x + 1][pos_y] == PEDRA || mapa[pos_x + 1][pos_y] == DIAMANTE) && 
   	  (mapa[pos_x - 1][pos_y] != PEDRA || mapa[pos_x - 1][pos_y] != DIAMANTE)){
   	  if(mapa[pos_x][pos_y + 1] == VAZIO && mapa[pos_x + 1][pos_y + 1] == VAZIO){
