@@ -164,13 +164,13 @@ void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, l
     }
     //Verifica se chegou no chão
   	if(objetos_mapa->rock[i].caindo == 1){
-  	  if(mapa[pos_x + 1][pos_y] != VAZIO && mapa[pos_x + 1][pos_y] != PLAYER && mapa[pos_x + 1][pos_y] != EXPLOSAO){
+  	  if(mapa[pos_x + 1][pos_y] != VAZIO && mapa[pos_x + 1][pos_y] != PLAYER && mapa[pos_x + 1][pos_y]){
   	  	play_sound(som->fall);
   	    objetos_mapa->rock[i].caindo = 0;
   	  }
   	}
   	//Desabamento normal
-  	if(mapa[pos_x + 1][pos_y] == VAZIO){
+  	if(mapa[pos_x + 1][pos_y] == VAZIO && (pos_x + 1 < 21)){
   	  objetos_mapa->rock[i].caindo = 1;
   	  objetos_mapa->rock[i].x++;
   	  mapa[pos_x + 1][pos_y] = PEDRA;
@@ -208,7 +208,7 @@ void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa
   	  }
   	}
 
-  	if(mapa[pos_x + 1][pos_y] == VAZIO){
+  	if(mapa[pos_x + 1][pos_y] == VAZIO && (pos_x + 1 < 21)){
   	  objetos_mapa->diamond[i].caindo = 1;
   	  objetos_mapa->diamond[i].x++;
   	  mapa[pos_x + 1][pos_y] = DIAMANTE;

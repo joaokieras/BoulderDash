@@ -16,7 +16,7 @@
 #define WIDTH (40 * SIZE_OBJS)
 #define HEIGHT ((22 * SIZE_OBJS) + MARGIN_TOP)
 #define FRAMERATE 60.0
-#define TEMPO_RESET 105
+#define TEMPO_RESET 165
 #define KEY_SEEN     1
 #define KEY_RELEASED 2
 #define SPAWN_X (3 * SIZE_OBJS)
