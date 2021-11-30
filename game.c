@@ -162,6 +162,8 @@ void state_play(){
   	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
+  	  	if(!strcmp(jogador->code, cheat_code))
+  	      jogador->invencivel = 1;
   	  	if(!jogador->invencivel)
   	  	  morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
   	  	if(morreu)
@@ -253,7 +255,7 @@ void draw_instructions(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), elas podem cair em cima voce!");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 160 + 2 * SIZE_OBJS, 0, "Voce pode se mover pelo mapa utilizando as setas do teclado");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 220 + 2 * SIZE_OBJS, 0, "Dica! Ao apertar a tecla 'i' seu personagem fica invencivel, ");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 220 + 2 * SIZE_OBJS, 0, "Dica! Ao utilizar o cheat code 'prog' seu personagem fica invencivel,");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 240 + 2 * SIZE_OBJS, 0, "mas cuidado! Voce ainda pode ficar preso entre as pedras.");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 280 + 2 * SIZE_OBJS, 0, "Jogo desenvolvido por Joao Pedro Kieras Oliveira para a");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 300 + 2 * SIZE_OBJS, 0, "disciplina de Programacao 2.");
@@ -277,12 +279,10 @@ void draw_hud(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2 - 10, 10, 0, "Help: H/F1");
   al_draw_textf(font, al_map_rgb(255, 255, 255), 1000, 10, 0, "cheat:%s", jogador->code);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: %d", jogador->invencivel);
-  /*if(jogador->invencivel)
+  if(jogador->invencivel)
     al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: ON");
   else
   	al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: OFF");
-  */
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){
@@ -310,9 +310,6 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
       jogador->tired++;
     }
   }
-  /*else if(key[ALLEGRO_KEY_I]){
-  	jogador->invencivel = 1;
-  }*/
   else if(key[ALLEGRO_KEY_P]){
   	jogador->code[0] = 'p';
   }
@@ -325,8 +322,6 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
   else if(key[ALLEGRO_KEY_G]){
   	jogador->code[3] = 'g';
   }
-  if(!strcmp(jogador->code, cheat_code))
-  	jogador->invencivel = 1;
   
   if(key[ALLEGRO_KEY_ESCAPE])
     *done = true;

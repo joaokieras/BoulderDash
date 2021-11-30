@@ -33,7 +33,7 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->vivo = 1;
   jogador->vidas = 3;
   for(int i = 0;i < 4;i++)
-  	jogador->code[i] = '0';
+  	jogador->code[i] = 'A';
   jogador->code[4] = '\0';
   inicia_sprites_jogador(sheet, jogador);
   return jogador;
@@ -302,6 +302,5 @@ int testa_game_win(int** mapa, player* jogador){
 }
 
 void destroi_player(player* jogador){
-  //free(jogador->code);
   free(jogador);
 }
