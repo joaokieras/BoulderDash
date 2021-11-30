@@ -9,7 +9,8 @@ struct pontos{
 };
 typedef struct pontos pontos;
 
-void carrega_pontuacao(int* pontuacao, int tam);
-void salva_pontuacao(int pontos, int* pontuacao, int tam);
+pontos* carrega_pontuacao(int tam);
+void salva_pontuacao(int pontos_jogador, pontos* pontuacao);
+void destroi_pontuacao(pontos* pontos);
 
 #endif

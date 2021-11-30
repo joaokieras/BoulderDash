@@ -20,8 +20,8 @@ ALLEGRO_BITMAP* sheet;
 player *jogador;
 objetos *objetos_mapa;
 audio *sons_jogo;
-//pontos *pontos_totais;
-int pontos_totais[5];
+pontos *pontos_totais;
+//int pontos_totais[5];
 
 int **mapa, relogio = 150;
 long frames = 0;
@@ -59,7 +59,7 @@ void state_init(){
   sons_jogo = inicializa_sons();
   al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
   //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
-  carrega_pontuacao(pontos_totais, 5);
+  pontos_totais = carrega_pontuacao(5);
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);
   al_set_new_display_option(ALLEGRO_SAMPLES, 8, ALLEGRO_SUGGEST);
@@ -187,7 +187,7 @@ void state_play(){
 
 void state_end(){
   bool done = false;
-  salva_pontuacao(jogador->pontuacao, pontos_totais, 5);
+  salva_pontuacao(jogador->pontuacao, pontos_totais);
   al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
@@ -218,6 +218,7 @@ void state_close(){
   destroi_mapa(mapa);
   destroi_objetos(objetos_mapa);
   destroi_player(jogador);
+  destroi_pontuacao(pontos_totais);
   al_destroy_bitmap(sheet);
   al_destroy_font(font);
   al_destroy_display(disp);
@@ -256,7 +257,7 @@ void draw_end_game(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "PONTUACAO: %d", jogador->pontuacao);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 140 + 2 * SIZE_OBJS, 0, "Placar de pontos");
   for(int i = 0;i < 5;i++)
-  	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 180 + (i*30) + 2 * SIZE_OBJS, 0, "%d: %d pts", i + 1, pontos_totais[i]);
+  	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 180 + (i*30) + 2 * SIZE_OBJS, 0, "%d: %d pts", i + 1, pontos_totais->score[i]);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 5 * SIZE_OBJS, 500 + 2 * SIZE_OBJS, 0, "Pressione ESC para sair...");
   al_flip_display();
 }
