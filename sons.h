@@ -12,6 +12,7 @@ struct audio{
   ALLEGRO_SAMPLE* diamante;
   ALLEGRO_SAMPLE* fall;
   ALLEGRO_SAMPLE* win;
+  ALLEGRO_SAMPLE* lose;
   ALLEGRO_SAMPLE* cheat;
   ALLEGRO_AUDIO_STREAM* bg_music;
 };

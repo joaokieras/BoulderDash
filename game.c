@@ -183,6 +183,7 @@ void state_play(){
   	}
   	//Jogador perdeu
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0){
+  	  play_sound(sons_jogo->lose);
   	  state = FIMPART;
   	  break;
   	}
