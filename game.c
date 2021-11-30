@@ -348,7 +348,3 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
 
   redraw = true;
 }
-
-
-
-

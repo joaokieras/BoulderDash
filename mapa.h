@@ -51,12 +51,14 @@ int testa_game_over(int** mapa, audio* som, objetos* objetos_mapa, long frames, 
 void testa_desmoronamento_pedra(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 void testa_desmoronamento_diamante(int** mapa, audio* som, objetos* objetos_mapa, long frames);
 int** inicia_mapa(char* nome_mapa, objetos* obj);
+void inicia_pedras_e_diamantes(int** mapa, objetos* obj);
 objetos* inicia_objetos(ALLEGRO_BITMAP* sheet);
-int** recarrega_mapa(char* nome_mapa, int** mapa_numerico);
 void busca_pedras_explosao(objetos* obj, int x, int y);
 void busca_diamantes_explosao(objetos* obj, int x, int y);
 void busca_e_destroi_pedra(objetos* obj, int x, int y);
 void busca_e_destroi_diamante(objetos* obj, int x, int y);
 void destroi_mapa(int** mapa);
 void destroi_objetos(objetos* obj);
+void verifica_rolamento_pedras(int** mapa, objetos* objetos_mapa, int pos_x, int pos_y, int i);
+void verifica_rolamento_diamantes(int** mapa, objetos* objetos_mapa, int pos_x, int pos_y, int i);
 #endif
