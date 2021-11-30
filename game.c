@@ -62,7 +62,7 @@ void state_init(){
   al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
 
   //Para colocar/tirar música de fundo basta descomentar/comentar comando abaixo
-  //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
+  al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
   pontos_totais = carrega_pontuacao();
 
   al_set_new_display_option(ALLEGRO_SAMPLE_BUFFERS, 1, ALLEGRO_SUGGEST);

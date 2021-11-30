@@ -41,4 +41,10 @@ void verifica_min_diamantes(int** mapa, player* jogador);
 void reseta_player(player* jogador);
 int testa_game_win(int** mapa, player* jogador);
 void destroi_player(player* jogador);
+int verifica_diamantes_horizontal(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado);
+int verifica_diamantes_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado);
+int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado);
+int verifica_terra_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado);
+int empurra_pedra_esq(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y);
+int empurra_pedra_dir(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y);
 #endif

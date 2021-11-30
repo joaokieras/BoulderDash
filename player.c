@@ -81,124 +81,118 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   //Coordenadas do personagem dentro do mapa
   x = jogador->pos_x / SIZE_OBJS;
   y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;	
-  //0 - Esquerda
-  //1 - Direita
-  //2 - Cima
-  //3 - Baixo
+  //0 - Esquerda - 1 - Direita - 2 - Cima - 3 - Baixo
   //Personagem só pode se mover a cada 5 frames
   if(jogador->tired % 5 == 0){
     switch(direcao){
   	case 0:
-  	  //Verifica se há diamante
-  	  if(mapa[y][x - 1] == DIAMANTE){
-  	  	busca_e_destroi_diamante(obj, y, x - 1);
-  	  	mapa[y][x - 1] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
-  	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 10;
-  	  	jogador->diamantes++;
+  	  if(verifica_diamantes_horizontal(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  }
-  	  if(mapa[y][x - 1] == TERRA || mapa[y][x - 1] == VAZIO){
-  	  	if(mapa[y][x - 1] == TERRA)
-  	  	  play_sound(som->terra);
-  	  	mapa[y][x - 1] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
+  	  if(verifica_terra_horizontal(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  }
   	  //Empurra pedra à esquerda a cada 10 frames para ser mais demorado e "difícil"
   	  //Se [vazio][pedra][player], então -> [pedra][player][vazio]
-  	  if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
-  	  	for(int i = 0;i < obj->qntd_rocks;i++){
-  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x - 1)
-  	  	  	obj->rock[i].y--;
-  	  	}
-  	  	mapa[y][x - 1] = PLAYER;
-  	  	mapa[y][x - 2] = PEDRA;
-  	  	mapa[y][x] = VAZIO;
+  	  if(empurra_pedra_esq(jogador, som, mapa, obj, frames, x, y))
   	  	return 1;
-  	  }
   	  break;
   	case 1:
-  	  if(mapa[y][x + 1] == DIAMANTE){
-  	  	busca_e_destroi_diamante(obj, y, x + 1);
-  	  	mapa[y][x + 1] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
-  	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 10;
-  	  	jogador->diamantes++;
+  	  if(verifica_diamantes_horizontal(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  }
-  	  if(mapa[y][x + 1] == TERRA || mapa[y][x + 1] == VAZIO){
-  	  	if(mapa[y][x + 1] == TERRA)
-  	  	  play_sound(som->terra);
-  	  	mapa[y][x + 1] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
+  	  if(verifica_terra_horizontal(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  }
-  	  //Empurra pedra à direita
-  	  if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
-  	  	for(int i = 0;i < obj->qntd_rocks;i++){
-  	  	  if(obj->rock[i].x == y && obj->rock[i].y == x + 1)
-  	  	  	obj->rock[i].y++;
-  	  	}
-  	  	mapa[y][x + 1] = PLAYER;
-  	  	mapa[y][x + 2] = PEDRA;
-  	  	mapa[y][x] = VAZIO;
+  	  if(empurra_pedra_dir(jogador, som, mapa, obj, frames, x, y))
   	  	return 1;
-  	  }
   	  break;
   	case 2:
-  	  if(mapa[y - 1][x] == DIAMANTE){
-  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
-  	  	  if(obj->diamond[i].x == y - 1 && obj->diamond[i].y == x){
-  	  	  	obj->diamond[i].x = 0;
-  	  	  	obj->diamond[i].y = 0;
-  	  	  	obj->diamond[i].caindo = 0;
-  	  	  }
-  	  	}
-  	  	mapa[y - 1][x] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
-  	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 10;
-  	  	jogador->diamantes++;
+  	  if(verifica_diamantes_vertical(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  }
-  	  if(mapa[y - 1][x] == TERRA || mapa[y - 1][x] == VAZIO){
-  	  	if(mapa[y - 1][x] == TERRA)
-  	  	  play_sound(som->terra);
-  	  	mapa[y - 1][x] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
+  	  if(verifica_terra_vertical(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  }
   	  break;
   	case 3:
-  	  if(mapa[y + 1][x] == DIAMANTE){
-  	  	for(int i = 0;i < obj->qntd_diamonds;i++){
-  	  	  if(obj->diamond[i].x == y + 1 && obj->diamond[i].y == x){
-  	  	  	obj->diamond[i].x = 0;
-  	  	  	obj->diamond[i].y = 0;
-  	  	  	obj->diamond[i].caindo = 0;
-  	  	  }
-  	  	}
-  	  	mapa[y + 1][x] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
-  	  	play_sound(som->diamante);
-  	  	jogador->pontuacao += 10;
-  	  	jogador->diamantes++;
+  	  if(verifica_diamantes_vertical(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  }
-  	  if(mapa[y + 1][x] == TERRA || mapa[y + 1][x] == VAZIO){
-  	  	if(mapa[y + 1][x] == TERRA)
-  	  	  play_sound(som->terra);
-  	  	mapa[y + 1][x] = PLAYER;
-  	  	mapa[y][x] = VAZIO;
+  	  if(verifica_terra_vertical(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  }
   	  break;
+    } 
   }
-  
+  return 0;
 }
+
+int verifica_diamantes_horizontal(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+  if(mapa[y][x + lado] == DIAMANTE){
+  	busca_e_destroi_diamante(obj, y, x + lado);
+  	mapa[y][x + lado] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	play_sound(som->diamante);
+  	jogador->pontuacao += 10;
+  	jogador->diamantes++;
+  	return 1;
+  }
+  return 0;
+}
+
+int verifica_diamantes_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+  if(mapa[y + lado][x] == DIAMANTE){
+  	busca_e_destroi_diamante(obj, y + lado, x);
+  	mapa[y + lado][x] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	play_sound(som->diamante);
+  	jogador->pontuacao += 10;
+  	jogador->diamantes++;
+  	return 1;
+  }
+  return 0;
+}
+
+int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+  if(mapa[y][x + lado] == TERRA || mapa[y][x + lado] == VAZIO){
+  	if(mapa[y][x + lado] == TERRA)
+  	  play_sound(som->terra);
+  	mapa[y][x + lado] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	return 1;
+  }
+  return 0;
+}
+
+int verifica_terra_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+  if(mapa[y + lado][x] == TERRA || mapa[y + lado][x] == VAZIO){
+  	if(mapa[y + lado][x] == TERRA)
+  	  play_sound(som->terra);
+  	mapa[y + lado][x] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	return 1;
+  }
+  return 0;
+}
+
+int empurra_pedra_esq(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y){
+if(mapa[y][x - 1] == PEDRA && mapa[y][x - 2] == VAZIO && frames % 10 == 0){
+  for(int i = 0;i < obj->qntd_rocks;i++){
+  	if(obj->rock[i].x == y && obj->rock[i].y == x - 1)
+  	  obj->rock[i].y--;
+  }
+  mapa[y][x - 1] = PLAYER;
+  mapa[y][x - 2] = PEDRA;
+  mapa[y][x] = VAZIO;
+  return 1;
+  }
+  return 0;
+}
+
+int empurra_pedra_dir(player* jogador, audio* som, int** mapa, objetos* obj, long frames, int x, int y){
+  if(mapa[y][x + 1] == PEDRA && mapa[y][x + 2] == VAZIO && frames % 10 == 0){
+    for(int i = 0;i < obj->qntd_rocks;i++){
+  	  if(obj->rock[i].x == y && obj->rock[i].y == x + 1)
+  	  	obj->rock[i].y++;
+  	}
+  	mapa[y][x + 1] = PLAYER;
+  	mapa[y][x + 2] = PEDRA;
+  	mapa[y][x] = VAZIO;
+  	return 1;
+  }
   return 0;
 }
 
