@@ -21,7 +21,6 @@ player *jogador;
 objetos *objetos_mapa;
 audio *sons_jogo;
 pontos *pontos_totais;
-//int pontos_totais[5];
 
 int **mapa, relogio = 150;
 long frames = 0;
@@ -45,19 +44,24 @@ void state_init(){
   queue = al_create_event_queue();
   inicia_allegro(queue, "queue");
 
+  //Pega spritesheet
   inicia_allegro(al_init_image_addon(), "image addon");
   sheet = al_load_bitmap(PATH_SPRITESHEET);
   inicia_allegro(sheet, "spritesheet"); 
 
+  //Pega áudios
   inicia_allegro(al_install_audio(), "audio");
   inicia_allegro(al_init_acodec_addon(), "audio codecs");
   inicia_allegro(al_reserve_samples(16), "reserve samples");
 
+  //Inicia estruturas principais
   jogador = inicia_jogador(sheet);
   objetos_mapa = inicia_objetos(sheet);
   mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
   sons_jogo = inicializa_sons();
   al_set_audio_stream_playmode(sons_jogo->bg_music, ALLEGRO_PLAYMODE_LOOP);
+
+  //Para colocar/tirar música de fundo basta descomentar/comentar comando abaixo
   //al_attach_audio_stream_to_mixer(sons_jogo->bg_music, al_get_default_mixer());
   pontos_totais = carrega_pontuacao();
 
@@ -68,7 +72,7 @@ void state_init(){
   disp = al_create_display(WIDTH, HEIGHT);
   inicia_allegro(disp, "display");
 
-  //font = al_create_builtin_font();
+  //Inicia fontes
   inicia_allegro(al_init_font_addon(), "fonte");
   inicia_allegro(al_init_ttf_addon(), "fonte");
   font = al_create_builtin_font();
@@ -99,12 +103,14 @@ void state_serve(){
         key[event.keyboard.keycode] &= KEY_RELEASED;
         break;
   	}
+  	//Caso H/F1 seja pressionado, volta ao jogo
   	if(key[ALLEGRO_KEY_H] || key[ALLEGRO_KEY_F1]){
   	  key[ALLEGRO_KEY_H] = 0;
       key[ALLEGRO_KEY_F1] = 0;
       state = JOGANDO;
       done = true;
   	}
+  	//Caso ESC seja pressionado, fim partida
   	else if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
   	  state = FIMPART;
@@ -128,21 +134,25 @@ void state_play(){
   	al_wait_for_event(queue, &event);
   	switch(event.type){
   	  case ALLEGRO_EVENT_TIMER:
+  	    //Aqui ocorrem os principais eventos do jogo
   	  	verifica_entradas(key, &done, redraw, jogador);
   	  	verifica_min_diamantes(mapa, jogador);
   	  	testa_desmoronamento_pedra(mapa, sons_jogo, objetos_mapa, frames);
   	  	testa_desmoronamento_diamante(mapa, sons_jogo, objetos_mapa, frames);
+  	  	//Ativa o cheat code
   	  	if(!strcmp(jogador->code, cheat_code) && glitch){
   	  	  jogador->pontuacao += 500; 
   	      jogador->invencivel = 1;
   	      glitch = 0;
   	  	}
+  	  	//Se o jogador não está invencível, verifica se algo cai em cima dele
   	  	if(!jogador->invencivel)
   	  	  morreu = testa_game_over(mapa, sons_jogo, objetos_mapa, frames, relogio);
   	  	if(morreu)
   	  	  reseta_player(jogador);
   	  	if(frames % 60 == 0 && jogador->vivo)
   	  	  relogio--;
+  	  	//Se jogador morreu, espera a animação de explosão e reinicia o mapa e o relógio
   	  	if(!jogador->vivo && frames % TEMPO_RESET == 0){
   	  	  mapa = inicia_mapa(PATH_MAP_1, objetos_mapa);
   	  	  relogio = 150;
@@ -158,22 +168,26 @@ void state_play(){
         done = true;
         break;
   	}
+  	//Vai para menu de ajuda
   	if(key[ALLEGRO_KEY_H] || key[ALLEGRO_KEY_F1]){
   	  key[ALLEGRO_KEY_H] = 0;
       key[ALLEGRO_KEY_F1] = 0;
       state = SERVINDO;
       done = true;
   	}
+  	//Jogador desistiu
   	if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
   	  jogador->vidas = 0;
   	}
+  	//Jogador perdeu
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0){
   	  state = FIMPART;
   	  break;
   	}
   	if(done)
       break;
+    //Testa se jogador venceu
     if(testa_game_win(mapa, jogador)){
       ganhou = 1;
       jogador->pontuacao = jogador->pontuacao + (relogio * 10);
@@ -190,6 +204,7 @@ void state_play(){
 
 void state_end(){
   bool done = false;
+  //Fim do jogo, salva pontuação feita pelo jogador
   salva_pontuacao(jogador->pontuacao, pontos_totais);
   al_flush_event_queue(queue);
   while(1){
@@ -204,6 +219,7 @@ void state_end(){
         key[event.keyboard.keycode] &= KEY_RELEASED;
         break;
   	}
+  	//Ao pressionar ESC termina o jogo
   	if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
   	  state = FIMJOGO;
@@ -230,6 +246,7 @@ void state_close(){
   exit(1);
 }
 
+//Função de desenho principal
 void draw(bool redraw, long frames){
   draw_hud();
   draw_map(mapa, sons_jogo, objetos_mapa, frames);
@@ -258,7 +275,7 @@ void draw_end_game(){
   al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "F I M D E J O G O");
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "PONTUACAO: %d", jogador->pontuacao);
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 140 + 2 * SIZE_OBJS, 0, "Placar de pontos");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 140 + 2 * SIZE_OBJS, 0, "Placar de lideres");
   for(int i = 0;i < 5;i++)
   	al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 180 + (i*30) + 2 * SIZE_OBJS, 0, "%d: %d pts", i + 1, pontos_totais->score[i]);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 5 * SIZE_OBJS, 500 + 2 * SIZE_OBJS, 0, "Pressione ESC para sair...");
@@ -304,6 +321,7 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
       jogador->tired++;
     }
   }
+  //Verifica se jogador fez o cheatcode
   else if(key[ALLEGRO_KEY_P]){
   	jogador->code[0] = 'p';
   }

@@ -30,7 +30,7 @@ void salva_pontuacao(int pontos_jogador, pontos* pontuacao){
   	fprintf(stderr, "Não foi possivel inicializar o arquivo score\n");
     exit(1);
   }
-  int i = pontuacao->tam;
+  int i = pontuacao->tam - 1;
   while(pontos_jogador > pontuacao->score[i - 1] && i > 0)
   {
     i--;
