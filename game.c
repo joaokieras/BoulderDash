@@ -15,7 +15,7 @@ ALLEGRO_EVENT_QUEUE* queue;
 ALLEGRO_DISPLAY* disp;
 ALLEGRO_FONT* font;
 ALLEGRO_BITMAP* sheet;
-ALLEGRO_BITMAP* background;
+//ALLEGRO_BITMAP* background;
 
 player *jogador;
 objetos *objetos_mapa;
@@ -78,36 +78,7 @@ void state_init(){
   al_register_event_source(queue, al_get_display_event_source(disp));
   al_register_event_source(queue, al_get_timer_event_source(timer));
 
-  background = al_load_bitmap("resources/sprites/background.png");
-  //Menu de início
-  /*bool done = false;
-  al_flush_event_queue(queue);
-  while(1){
-    al_wait_for_event(queue, &event);
-    if(al_is_event_queue_empty(queue))
-  	  draw_inicial_menu();
-  	al_flip_display();
-  	switch(event.type){
-  	  case ALLEGRO_EVENT_KEY_DOWN:
-        key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
-        break;
-      case ALLEGRO_EVENT_KEY_UP:
-        key[event.keyboard.keycode] &= KEY_RELEASED;
-        break;
-  	}
-  	if(key[ALLEGRO_KEY_ENTER]){
-  	  key[ALLEGRO_KEY_ENTER] = 0;
-      state = JOGANDO;
-      done = true;
-  	}
-  	else if(key[ALLEGRO_KEY_ESCAPE]){
-  	  key[ALLEGRO_KEY_ESCAPE] = 0;
-  	  state = FIMPART;
-  	  done = true;
-  	}
-  	if(done)
-  	  break;
-  }*/
+  //background = al_load_bitmap("resources/sprites/background.png");
 
   state = JOGANDO;
 }
@@ -117,7 +88,6 @@ void state_serve(){
   al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
-  	//al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
   	if(al_is_event_queue_empty(queue))
   	  draw_instructions();
   	switch(event.type){
@@ -142,7 +112,6 @@ void state_serve(){
   	if(done)
   	  break;
   }
-  //state = JOGANDO;
 }
 
 void state_play(){
@@ -193,8 +162,7 @@ void state_play(){
   	}
   	if(key[ALLEGRO_KEY_ESCAPE]){
   	  key[ALLEGRO_KEY_ESCAPE] = 0;
-  	  state = FIMPART;
-  	  done  = true;
+  	  jogador->vidas = 0;
   	}
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0){
   	  state = FIMPART;
@@ -203,11 +171,12 @@ void state_play(){
   	if(done)
       break;
     if(testa_game_win(mapa, jogador)){
+      ganhou = 1;
       jogador->pontuacao = jogador->pontuacao + (relogio * 10);
   	  draw(redraw, frames);
   	  play_sound(sons_jogo->win);
   	  state = FIMPART;
-  	  al_rest(1);
+  	  //al_rest(1);
   	  break;
   	}
   	if(redraw && al_is_event_queue_empty(queue))
@@ -219,9 +188,41 @@ void state_play(){
 
 void state_end(){
   //al_draw_textf(font, al_map_rgb(255, 255, 255), 300, 0, 0, "FIM DO JOGO");
-  al_flip_display();
-  al_rest(1);
-  state = FIMJOGO;
+  //al_flip_display();
+  bool done = false;
+  al_flush_event_queue(queue);
+  while(1){
+  	al_wait_for_event(queue, &event);
+  	if(al_is_event_queue_empty(queue))
+  	  draw_end_game();
+  	switch(event.type){
+  	  case ALLEGRO_EVENT_KEY_DOWN:
+        key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
+        break;
+      case ALLEGRO_EVENT_KEY_UP:
+        key[event.keyboard.keycode] &= KEY_RELEASED;
+        break;
+  	}
+  	/*if(key[ALLEGRO_KEY_ENTER]){
+  	  //key[ALLEGRO_KEY_ENTER] = 0;
+      state = INICIO;
+      done = true;
+  	}*/
+  	if(key[ALLEGRO_KEY_ESCAPE]){
+  	  key[ALLEGRO_KEY_ESCAPE] = 0;
+  	  state = FIMJOGO;
+  	  done = true;
+  	}
+  	if(done)
+  	  break;
+  }
+
+  /*if(ganhou)
+  	draw_screen_win();
+  else
+  	draw_screen_lose();*/
+  //al_rest(1);
+  //state = FIMJOGO;
 }
 
 void state_close(){
@@ -265,11 +266,18 @@ void draw_instructions(){
   //redraw = false;
 }
 
-void draw_inicial_menu(){
+void draw_end_game(){
+  al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "F I M D E J O G O");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 80 + 2 * SIZE_OBJS, 0, "Pressione ESC para sair...");
+  al_flip_display();
+}
+
+/*void draw_inicial_menu(){
   al_draw_bitmap(background, 0, 0, 0);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 0, 0, 0, "OPA");
   al_flip_display();
-}
+}*/
 
 void draw_hud(){
   al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -279,7 +287,6 @@ void draw_hud(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2 - 10, 10, 0, "Help: H/F1");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), 1000, 10, 0, "cheat:%s", jogador->code);
   if(jogador->invencivel)
     al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: ON");
   else
