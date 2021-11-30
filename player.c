@@ -88,7 +88,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	case 0:
   	  if(verifica_diamantes_horizontal(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  if(verifica_terra_horizontal(jogador, som, mapa, obj, x, y, -1))
+  	  else if(verifica_terra_horizontal(jogador, som, mapa, x, y, -1))
   	  	return 1;
   	  //Empurra pedra à esquerda a cada 10 frames para ser mais demorado e "difícil"
   	  //Se [vazio][pedra][player], então -> [pedra][player][vazio]
@@ -98,7 +98,7 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	case 1:
   	  if(verifica_diamantes_horizontal(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  if(verifica_terra_horizontal(jogador, som, mapa, obj, x, y, 1))
+  	  else if(verifica_terra_horizontal(jogador, som, mapa, x, y, 1))
   	  	return 1;
   	  if(empurra_pedra_dir(jogador, som, mapa, obj, frames, x, y))
   	  	return 1;
@@ -106,13 +106,13 @@ int testa_terreno(player* jogador, audio* som, int** mapa, int direcao, objetos 
   	case 2:
   	  if(verifica_diamantes_vertical(jogador, som, mapa, obj, x, y, -1))
   	  	return 1;
-  	  if(verifica_terra_vertical(jogador, som, mapa, obj, x, y, -1))
+  	  else if(verifica_terra_vertical(jogador, som, mapa, x, y, -1))
   	  	return 1;
   	  break;
   	case 3:
   	  if(verifica_diamantes_vertical(jogador, som, mapa, obj, x, y, 1))
   	  	return 1;
-  	  if(verifica_terra_vertical(jogador, som, mapa, obj, x, y, 1))
+  	  else if(verifica_terra_vertical(jogador, som, mapa, x, y, 1))
   	  	return 1;
   	  break;
     } 
@@ -146,7 +146,7 @@ int verifica_diamantes_vertical(player* jogador, audio* som, int** mapa, objetos
   return 0;
 }
 
-int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, int x, int y, int lado){
   if(mapa[y][x + lado] == TERRA || mapa[y][x + lado] == VAZIO){
   	if(mapa[y][x + lado] == TERRA)
   	  play_sound(som->terra);
@@ -157,7 +157,7 @@ int verifica_terra_horizontal(player* jogador, audio* som, int** mapa, objetos* 
   return 0;
 }
 
-int verifica_terra_vertical(player* jogador, audio* som, int** mapa, objetos* obj, int x, int y, int lado){
+int verifica_terra_vertical(player* jogador, audio* som, int** mapa, int x, int y, int lado){
   if(mapa[y + lado][x] == TERRA || mapa[y + lado][x] == VAZIO){
   	if(mapa[y + lado][x] == TERRA)
   	  play_sound(som->terra);
@@ -199,42 +199,58 @@ int empurra_pedra_dir(player* jogador, audio* som, int** mapa, objetos* obj, lon
 void atualiza_player(player *jogador, int direcao, int andou){
   switch(direcao){
   	case 0:
-  	  jogador->flag_left = 0;
-      jogador->ciclos_esq++;
-      if(jogador->tired % 5 == 0 && andou){
-    	jogador->pos_x -= jogador->vel_x;
-    	jogador->tired = 0;
-      }
+  	  atualiza_player_esq(jogador, andou);
       break;
     case 1:
-  	  jogador->flag_right = 0;
-      jogador->ciclos_dir++;
-      if(jogador->tired % 5 == 0 && andou){
-    	jogador->pos_x += jogador->vel_x;
-    	jogador->tired = 0;
-  	  }
+  	  atualiza_player_dir(jogador, andou);
       break;
     case 2:
-      jogador->flag_up = 0;
-      jogador->ciclos_dir++;
-      if(jogador->tired % 5 == 0 && andou){
-        jogador->pos_y -= jogador->vel_y;
-        jogador->tired = 0;
-      }
+      atualiza_player_cima(jogador, andou);
       break;
     case 3:
-      jogador->flag_down = 0;
-      jogador->ciclos_dir++;
-      if(jogador->tired % 5 == 0 && andou){
-        jogador->pos_y += jogador->vel_y;
-        jogador->tired = 0;
-      }
+      atualiza_player_baixo(jogador, andou);
       break;	  
   }
   if(jogador->ciclos_esq == 7)
     jogador->ciclos_esq = 0;
   if(jogador->ciclos_dir == 7)
     jogador->ciclos_dir = 0;
+}
+
+void atualiza_player_esq(player* jogador, int andou){
+  jogador->flag_left = 0;
+  jogador->ciclos_esq++;
+  if(jogador->tired % 5 == 0 && andou){
+    jogador->pos_x -= jogador->vel_x;
+    jogador->tired = 0;
+  }
+}
+
+void atualiza_player_dir(player* jogador, int andou){
+  jogador->flag_right = 0;
+  jogador->ciclos_dir++;
+  if(jogador->tired % 5 == 0 && andou){
+    jogador->pos_x += jogador->vel_x;
+    jogador->tired = 0;
+  }
+}
+
+void atualiza_player_cima(player* jogador, int andou){
+  jogador->flag_up = 0;
+  jogador->ciclos_dir++;
+  if(jogador->tired % 5 == 0 && andou){
+    jogador->pos_y -= jogador->vel_y;
+    jogador->tired = 0;
+  }
+}
+
+void atualiza_player_baixo(player* jogador, int andou){
+  jogador->flag_down = 0;
+  jogador->ciclos_dir++;
+  if(jogador->tired % 5 == 0 && andou){
+    jogador->pos_y += jogador->vel_y;
+    jogador->tired = 0;
+  }
 }
 
 void verifica_min_diamantes(int** mapa, player* jogador){
@@ -252,42 +268,41 @@ void reseta_player(player* jogador){
 
 int testa_game_win(int** mapa, player* jogador){
   int x, y;
-
   x = jogador->pos_x / SIZE_OBJS;
   y = (jogador->pos_y - MARGIN_TOP) /SIZE_OBJS;
   if(mapa[16][38] == PLAYER)
   	return 1;
-  else if(jogador->flag_left){
-  	if(mapa[y][x - 1] == SAIDA){
-  	  mapa[y][x - 1] = PLAYER;
-  	  mapa[y][x] = VAZIO;
-  	  atualiza_player(jogador, 0, 1);
-  	  return 1;
-  	}
-  }
   else if(jogador->flag_right){
-  	if(mapa[y][x + 1] == SAIDA){
-  	  mapa[y][x + 1] = PLAYER;
-  	  mapa[y][x] = VAZIO;
-  	  atualiza_player(jogador, 1, 1);
+  	if(verifica_vazio_horizontal(jogador, mapa, x, y, 1, 1))
   	  return 1;
-  	}
   }
   else if(jogador->flag_up){
-  	if(mapa[y - 1][x] == SAIDA){
-  	  mapa[y - 1][x] = PLAYER;
-  	  mapa[y][x] = VAZIO;
-  	  atualiza_player(jogador, 2, 1);
+  	if(verifica_vazio_vertical(jogador, mapa, x, y, -1, 2))
   	  return 1;
-  	}
   }
   else if(jogador->flag_down){
-  	if(mapa[y + 1][x] == SAIDA){
-  	  mapa[y + 1][x] = PLAYER;
-  	  mapa[y][x] = VAZIO;
-  	  atualiza_player(jogador, 3, 1);
+  	if(verifica_vazio_vertical(jogador, mapa, x, y, 1, 3))
   	  return 1;
-  	}
+  }
+  return 0;
+}
+
+int verifica_vazio_vertical(player* jogador, int** mapa, int x, int y, int lado, int direcao){
+  if(mapa[y + lado][x] == SAIDA){
+  	mapa[y + lado][x] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	atualiza_player(jogador, direcao, 1);
+  	return 1;
+  }
+  return 0;
+}
+
+int verifica_vazio_horizontal(player* jogador, int** mapa, int x, int y, int lado, int direcao){
+  if(mapa[y][x + lado] == SAIDA){
+  	mapa[y][x + lado] = PLAYER;
+  	mapa[y][x] = VAZIO;
+  	atualiza_player(jogador, direcao, 1);
+  	return 1;
   }
   return 0;
 }
