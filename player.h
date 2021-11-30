@@ -29,6 +29,7 @@ struct player{
   int invencivel;
   int diamantes;
   int pontuacao;
+  char code[5];
 };
 typedef struct player player;
 

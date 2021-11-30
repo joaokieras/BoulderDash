@@ -36,7 +36,7 @@ void state_close();
 void inicia_allegro(bool teste, char *descricao);
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador);
 void draw(bool redraw, long frames);
-void draw_instructions(bool redraw, long frames);
+void draw_instructions();
 void draw_inicial_menu();
 void draw_hud();
 #endif

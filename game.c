@@ -24,6 +24,7 @@ audio *sons_jogo;
 int **mapa, relogio = 150;
 long frames = 0;
 unsigned char key[ALLEGRO_KEY_MAX];
+char *cheat_code = "prog";
 
 void inicia_allegro(bool teste, char *descricao){
   if(teste) 
@@ -113,13 +114,12 @@ void state_init(){
 
 void state_serve(){
   bool done = false;
-  int draw = 1;
   al_flush_event_queue(queue);
   while(1){
   	al_wait_for_event(queue, &event);
   	//al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 20, 0, "PAUSE");
   	if(al_is_event_queue_empty(queue))
-  	  draw_instructions(draw, frames);
+  	  draw_instructions();
   	switch(event.type){
   	  case ALLEGRO_EVENT_KEY_DOWN:
         key[event.keyboard.keycode] = KEY_SEEN | KEY_RELEASED;
@@ -244,21 +244,20 @@ void draw(bool redraw, long frames){
   redraw = false;
 }
 
-void draw_instructions(bool redraw, long frames){
+void draw_instructions(){
   //al_clear_to_color(al_map_rgb(0, 0, 0));
   al_draw_filled_rectangle(3 * SIZE_OBJS, 2 * SIZE_OBJS, WIDTH - 3 * SIZE_OBJS, HEIGHT - 1 * SIZE_OBJS, al_map_rgba_f(0, 0, 0, 0.9));
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U Ç Õ E S");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo é coletar o máximo de diamantes possível");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 100 + 2 * SIZE_OBJS, 0, "e chegar na saída antes que o tempo acabe. Cuidado com as");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), elas podem cair em cima você!");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 160 + 2 * SIZE_OBJS, 0, "Você pode se mover pelo mapa utilizando as setas do teclado");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 220 + 2 * SIZE_OBJS, 0, "Dica! Ao apertar a tecla 'i' seu personagem fica invencível, ");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 240 + 2 * SIZE_OBJS, 0, "mas cuidado! Você ainda pode ficar preso entre as pedras.");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 280 + 2 * SIZE_OBJS, 0, "Jogo desenvolvido por João Pedro Kieras Oliveira para a");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 300 + 2 * SIZE_OBJS, 0, "disciplina de Programação 2.");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 320 + 2 * SIZE_OBJS, 0, "Departamento de Informática - UFPR");
-  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 2 * SIZE_OBJS, 340 + 2 * SIZE_OBJS, 0, "Novembro de 2021.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4 + 7 * SIZE_OBJS, 20 + 2 * SIZE_OBJS, 0, "I N S T R U C O E S");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 80 + 2 * SIZE_OBJS, 0, "O objetivo do jogo eh coletar o maximo de diamantes possivel");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 100 + 2 * SIZE_OBJS, 0, "e chegar na saida antes que o tempo acabe. Cuidado com as");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 120 + 2 * SIZE_OBJS, 0, "pedras (e diamantes), elas podem cair em cima voce!");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 160 + 2 * SIZE_OBJS, 0, "Voce pode se mover pelo mapa utilizando as setas do teclado");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 180 + 2 * SIZE_OBJS, 0, "e pode desistir da partida pressionando ESC.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 220 + 2 * SIZE_OBJS, 0, "Dica! Ao apertar a tecla 'i' seu personagem fica invencivel, ");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 240 + 2 * SIZE_OBJS, 0, "mas cuidado! Voce ainda pode ficar preso entre as pedras.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 280 + 2 * SIZE_OBJS, 0, "Jogo desenvolvido por Joao Pedro Kieras Oliveira para a");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 300 + 2 * SIZE_OBJS, 0, "disciplina de Programacao 2.");
+  al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/4, 340 + 2 * SIZE_OBJS, 0, "Departamento de Informatica - UFPR - Novembro de 2021.");
   al_flip_display();
   //redraw = false;
 }
@@ -277,10 +276,13 @@ void draw_hud(){
   al_draw_textf(font, al_map_rgb(255, 255, 255), 200, 10, 0, "%d", relogio);
   al_draw_textf(font, al_map_rgb(255, 255, 255), 100, 10, 0, "Vidas: %d", jogador->vidas);
   al_draw_textf(font, al_map_rgb(255, 255, 255), WIDTH/2 - 10, 10, 0, "Help: H/F1");
-  if(jogador->invencivel)
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 1000, 10, 0, "cheat:%s", jogador->code);
+  al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: %d", jogador->invencivel);
+  /*if(jogador->invencivel)
     al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: ON");
   else
   	al_draw_textf(font, al_map_rgb(255, 255, 255), 800, 10, 0, "invencivel: OFF");
+  */
 }
 
 void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *jogador){
@@ -308,9 +310,23 @@ void verifica_entradas(unsigned char *key, bool *done, bool redraw, player *joga
       jogador->tired++;
     }
   }
-  else if(key[ALLEGRO_KEY_I]){
+  /*else if(key[ALLEGRO_KEY_I]){
   	jogador->invencivel = 1;
+  }*/
+  else if(key[ALLEGRO_KEY_P]){
+  	jogador->code[0] = 'p';
   }
+  else if(key[ALLEGRO_KEY_R]){
+  	jogador->code[1] = 'r';
+  }
+  else if(key[ALLEGRO_KEY_O]){
+  	jogador->code[2] = 'o';
+  }
+  else if(key[ALLEGRO_KEY_G]){
+  	jogador->code[3] = 'g';
+  }
+  if(!strcmp(jogador->code, cheat_code))
+  	jogador->invencivel = 1;
   
   if(key[ALLEGRO_KEY_ESCAPE])
     *done = true;

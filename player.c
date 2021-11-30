@@ -2,6 +2,7 @@
 // GRR 20190379 Dinf - UFPR
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "game.h"
 #include "mapa.h"
 #include "player.h"
@@ -31,6 +32,9 @@ player* inicia_jogador(ALLEGRO_BITMAP* sheet){
   jogador->invencivel = 0;
   jogador->vivo = 1;
   jogador->vidas = 3;
+  for(int i = 0;i < 4;i++)
+  	jogador->code[i] = '0';
+  jogador->code[4] = '\0';
   inicia_sprites_jogador(sheet, jogador);
   return jogador;
 }
@@ -298,5 +302,6 @@ int testa_game_win(int** mapa, player* jogador){
 }
 
 void destroi_player(player* jogador){
+  //free(jogador->code);
   free(jogador);
 }
