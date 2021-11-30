@@ -197,6 +197,7 @@ void state_play(){
   	  done  = true;
   	}
   	if(jogador->vidas < 1 && frames % TEMPO_RESET == 0){
+  	  state = FIMPART;
   	  break;
   	}
   	if(done)
